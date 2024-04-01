@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sample_student_record_using_sqflite/screens/add_students_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,15 +15,23 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () {},
-            child: const Text('Add Details'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => AddStudentsScreen(),
+                ),
+              );
+
+              // Navigator.pushNamed(context, '/addDetails');
+            },
+            child: const Text('Add Students'),
           ),
           const SizedBox(
             width: 26,
           ),
           ElevatedButton(
             onPressed: () {},
-            child: const Text('View Details'),
+            child: const Text('View Students'),
           )
         ],
       )),

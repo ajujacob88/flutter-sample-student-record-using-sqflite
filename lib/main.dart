@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sample_student_record_using_sqflite/screens/add_students_screen.dart';
 import 'package:sample_student_record_using_sqflite/screens/home_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
@@ -46,8 +47,8 @@ class MyApp extends StatelessWidget {
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => const HomeScreen(),
-      //   '/addDetails': (context) => const AddDetailsScreen(),
-      //   '/viewDetails': (context) => const ViewDetailsScreen(),
+      //   '/addDetails': (context) => const AddStudentsScreen(),
+      //   //'/viewDetails': (context) => const ViewDetailsScreen(),
       // },
     );
   }
