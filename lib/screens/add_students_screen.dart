@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({super.key});
@@ -15,6 +16,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   final TextEditingController placeController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
+  final TextEditingController imageController = TextEditingController();
   String? selectedGender;
 
   late DateTime selectedDate;
@@ -59,22 +61,28 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     }
   }
 
+  Future<void> _uploadImage() async {
+    print('ckeck2');
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    print('pciked image file is $pickedFile');
+
+    if (pickedFile != null) {
+      setState(() {
+        imageController.text = pickedFile.path;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Students')),
       body: Padding(
-        padding: const EdgeInsets.all(60),
+        padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Upload Profile Picture'),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
             TextFormField(
               controller: nameController,
               decoration: const InputDecoration(labelText: 'Name'),
@@ -147,6 +155,37 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 26,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: imageController,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      labelText: 'Profile Pic',
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _uploadImage,
+                    child: const Text('Upload'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 26,
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Submit'),
             ),
           ],
         ),
