@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class AddStudentsScreen extends StatefulWidget {
@@ -99,37 +101,41 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
             const SizedBox(
               height: 16,
             ),
-            ElevatedButton(
-              onPressed: () => _selectDate(context),
-              child: const Text('Select Date of Birth'),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            //  Text(                'Date of Birth: ${DateFormat('dd/MM/yyyy').format(selectedDate)}'),
-            const SizedBox(
-              height: 16,
-            ),
-            Text('Age: $age'),
-            TextFormField(
-              initialValue: '$age',
-            ),
-            TextFormField(
-              controller: dobController,
-              decoration: InputDecoration(
-                labelText: 'Date of Birth',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () => _selectDate(context),
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: GestureDetector(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: dobController,
+                      decoration: InputDecoration(
+                        labelText: 'Date of Birth',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () => _selectDate(context),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            TextFormField(
-              readOnly: true,
-              controller: ageController,
-              decoration: const InputDecoration(
-                labelText: 'Age',
-              ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: ageController,
+                    decoration: const InputDecoration(
+                      labelText: 'Age',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
