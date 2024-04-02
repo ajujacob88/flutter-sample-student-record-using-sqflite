@@ -105,21 +105,30 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               children: [
                 Expanded(
                   flex: 3,
-                  child: GestureDetector(
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: dobController,
-                      decoration: InputDecoration(
-                        labelText: 'Date of Birth',
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () => _selectDate(context),
+                  child: Stack(
+                    children: [
+                      TextFormField(
+                        readOnly: true,
+                        controller: dobController,
+                        decoration: InputDecoration(
+                          labelText: 'Date of Birth',
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.calendar_today),
+                            onPressed: () => _selectDate(context),
+                          ),
                         ),
                       ),
-                    ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -129,9 +138,11 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   flex: 1,
                   child: TextFormField(
                     readOnly: true,
+                    enabled: false,
                     controller: ageController,
                     decoration: const InputDecoration(
                       labelText: 'Age',
+                      // floatingLabelBehavior: FloatingLabelBehavior.never
                     ),
                   ),
                 ),
