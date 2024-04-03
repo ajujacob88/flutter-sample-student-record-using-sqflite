@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+//import 'dart:io';
+import 'dart:typed_data';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({super.key});
@@ -18,6 +19,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   final TextEditingController imageController = TextEditingController();
   String? selectedGender;
   String? pickedFilePath;
+  Uint8List? _imageBytes;
 
   late DateTime selectedDate;
   int age = 0;
@@ -104,10 +106,17 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
 
+    // if (pickedFile != null) {
+    //   setState(() {
+    //     imageController.text = pickedFile.path;
+    //     pickedFilePath = pickedFile.path;
+    //   });
+    // }
+
     if (pickedFile != null) {
+      final fileBytes = await pickedFile.readAsBytes();
       setState(() {
-        imageController.text = pickedFile.path;
-        pickedFilePath = pickedFile.path;
+        _imageBytes = Uint8List.fromList(fileBytes);
       });
     }
   }
@@ -216,11 +225,21 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                     enabled: false,
                     decoration: InputDecoration(
                       labelText: 'Profile Pic',
-                      suffixIcon: pickedFilePath != null
-                          ? SizedBox(
-                              width: 350,
-                              height: 100,
-                              child: Image.file(File(pickedFilePath!)),
+                      border: InputBorder.none,
+                      // suffixIcon: pickedFilePath != null
+                      //     ? SizedBox(
+                      //         width: 350,
+                      //         height: 100,
+                      //         child: Image.file(File(pickedFilePath!)),
+                      //       )
+                      //     : null,
+
+                      suffixIcon: _imageBytes != null
+                          ? Image.memory(
+                              _imageBytes!,
+                              width: 130,
+                              height: 130,
+                              fit: BoxFit.fill,
                             )
                           : null,
                     ),
@@ -242,7 +261,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                         BorderSide(color: Color.fromARGB(255, 180, 177, 177)),
                       ),
                       foregroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromARGB(255, 125, 124, 124)),
+                          const Color.fromARGB(255, 125, 124, 124)),
                     ),
                     child: const Text('Upload'),
                   ),
