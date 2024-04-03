@@ -61,11 +61,48 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     }
   }
 
-  Future<void> _uploadImage() async {
-    print('ckeck2');
+  // Future<void> _uploadImage() async {
+
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       imageController.text = pickedFile.path;
+  //     });
+  //   }
+  // }
+
+  void _showImageSourceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Select image source'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                _getImage(ImageSource.camera);
+              },
+              child: const Text('Take Photo'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                _getImage(ImageSource.gallery);
+              },
+              child: const Text('Choose from Gallery'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _getImage(ImageSource source) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    print('pciked image file is $pickedFile');
+    final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
       setState(() {
@@ -172,12 +209,32 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
+
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: _uploadImage,
+                  child: OutlinedButton(
+                    onPressed: _showImageSourceDialog,
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Set the border radius here
+                        ),
+                      ),
+                      side: const MaterialStatePropertyAll(
+                        BorderSide(color: Color.fromARGB(255, 180, 177, 177)),
+                      ),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(255, 125, 124, 124)),
+                    ),
                     child: const Text('Upload'),
                   ),
                 ),
+                // Expanded(
+                //   child: ElevatedButton(
+                //     onPressed: _uploadImage,
+                //     child: const Text('Upload'),
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(
