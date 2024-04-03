@@ -125,163 +125,166 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Students')),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextFormField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            TextFormField(
-              controller: placeController,
-              decoration: const InputDecoration(labelText: 'Place'),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            DropdownButtonFormField(
-                hint: const Text('Select Gender'),
-                items: ['Male', 'Female', 'Other']
-                    .map((gender) =>
-                        DropdownMenuItem(value: gender, child: Text(gender)))
-                    .toList(),
-                onChanged: (value) {
-                  selectedGender = value.toString();
-                }),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Stack(
-                    children: [
-                      TextFormField(
-                        readOnly: true,
-                        controller: dobController,
-                        decoration: InputDecoration(
-                          labelText: 'Date of Birth',
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.calendar_today),
-                            onPressed: () => _selectDate(context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                controller: placeController,
+                decoration: const InputDecoration(labelText: 'Place'),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              DropdownButtonFormField(
+                  hint: const Text('Select Gender'),
+                  items: ['Male', 'Female', 'Other']
+                      .map((gender) =>
+                          DropdownMenuItem(value: gender, child: Text(gender)))
+                      .toList(),
+                  onChanged: (value) {
+                    selectedGender = value.toString();
+                  }),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Stack(
+                      children: [
+                        TextFormField(
+                          readOnly: true,
+                          controller: dobController,
+                          decoration: InputDecoration(
+                            labelText: 'Date of Birth',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.calendar_today),
+                              onPressed: () => _selectDate(context),
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned.fill(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              _selectDate(context);
-                            },
+                        Positioned.fill(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                _selectDate(context);
+                              },
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: TextFormField(
+                      readOnly: true,
+                      enabled: false,
+                      controller: ageController,
+                      decoration: const InputDecoration(
+                        labelText: 'Age',
+                        // floatingLabelBehavior: FloatingLabelBehavior.never
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: TextFormField(
-                    readOnly: true,
-                    enabled: false,
-                    controller: ageController,
-                    decoration: const InputDecoration(
-                      labelText: 'Age',
-                      // floatingLabelBehavior: FloatingLabelBehavior.never
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 26,
-            ),
-            Row(
-              children: [
-                // Expanded(
-                //   child: TextFormField(
-                //     readOnly: true,
-                //     controller: imageController,
-                //     enabled: false,
-                //     decoration: const InputDecoration(
-                //       labelText: 'Profile Pic',
-                //     ),
-                //   ),
-                // ),
-                Expanded(
-                  child: TextFormField(
-                    readOnly: true,
-                    controller: imageController,
-                    enabled: false,
-                    decoration: InputDecoration(
-                      labelText: 'Profile Pic',
-                      border: InputBorder.none,
-                      // suffixIcon: pickedFilePath != null
-                      //     ? SizedBox(
-                      //         width: 350,
-                      //         height: 100,
-                      //         child: Image.file(File(pickedFilePath!)),
-                      //       )
-                      //     : null,
+                ],
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              Row(
+                children: [
+                  // Expanded(
+                  //   child: TextFormField(
+                  //     readOnly: true,
+                  //     controller: imageController,
+                  //     enabled: false,
+                  //     decoration: const InputDecoration(
+                  //       labelText: 'Profile Pic',
+                  //     ),
+                  //   ),
+                  // ),
+                  Expanded(
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: imageController,
+                      enabled: false,
+                      decoration: InputDecoration(
+                        labelText: 'Profile Pic',
+                        border: InputBorder.none,
+                        // suffixIcon: pickedFilePath != null
+                        //     ? SizedBox(
+                        //         width: 350,
+                        //         height: 100,
+                        //         child: Image.file(File(pickedFilePath!)),
+                        //       )
+                        //     : null,
 
-                      suffixIcon: _imageBytes != null
-                          ? Image.memory(
-                              _imageBytes!,
-                              width: 130,
-                              height: 130,
-                              fit: BoxFit.fill,
-                            )
-                          : null,
+                        suffixIcon: _imageBytes != null
+                            ? Image.memory(
+                                _imageBytes!,
+                                width: 130,
+                                height: 130,
+                                fit: BoxFit.fill,
+                              )
+                            : null,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 16),
+                  const SizedBox(width: 16),
 
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: _showImageSourceDialog,
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Set the border radius here
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _showImageSourceDialog,
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Set the border radius here
+                          ),
                         ),
+                        side: const MaterialStatePropertyAll(
+                          BorderSide(color: Color.fromARGB(255, 180, 177, 177)),
+                        ),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 125, 124, 124)),
                       ),
-                      side: const MaterialStatePropertyAll(
-                        BorderSide(color: Color.fromARGB(255, 180, 177, 177)),
-                      ),
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromARGB(255, 125, 124, 124)),
+                      child: const Text('Upload'),
                     ),
-                    child: const Text('Upload'),
                   ),
-                ),
-                // Expanded(
-                //   child: ElevatedButton(
-                //     onPressed: _uploadImage,
-                //     child: const Text('Upload'),
-                //   ),
-                // ),
-              ],
-            ),
-            const SizedBox(
-              height: 26,
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Submit'),
-            ),
-          ],
+                  // Expanded(
+                  //   child: ElevatedButton(
+                  //     onPressed: _uploadImage,
+                  //     child: const Text('Upload'),
+                  //   ),
+                  // ),
+                ],
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Submit'),
+              ),
+            ],
+          ),
         ),
       ),
     );
