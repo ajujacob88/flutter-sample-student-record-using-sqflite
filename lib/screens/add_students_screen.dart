@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({super.key});
@@ -18,6 +17,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
   String? selectedGender;
+  String? pickedFilePath;
 
   late DateTime selectedDate;
   int age = 0;
@@ -107,6 +107,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     if (pickedFile != null) {
       setState(() {
         imageController.text = pickedFile.path;
+        pickedFilePath = pickedFile.path;
       });
     }
   }
@@ -198,13 +199,30 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
             ),
             Row(
               children: [
+                // Expanded(
+                //   child: TextFormField(
+                //     readOnly: true,
+                //     controller: imageController,
+                //     enabled: false,
+                //     decoration: const InputDecoration(
+                //       labelText: 'Profile Pic',
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   child: TextFormField(
                     readOnly: true,
                     controller: imageController,
                     enabled: false,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Profile Pic',
+                      suffixIcon: pickedFilePath != null
+                          ? SizedBox(
+                              width: 350,
+                              height: 100,
+                              child: Image.file(File(pickedFilePath!)),
+                            )
+                          : null,
                     ),
                   ),
                 ),
