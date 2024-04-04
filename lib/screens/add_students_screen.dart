@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
+
 //import 'dart:io';
-import 'dart:typed_data';
 import 'package:sample_student_record_using_sqflite/widgets/custom_date_and _age_picker.dart';
+import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({super.key});
@@ -15,114 +14,7 @@ class AddStudentsScreen extends StatefulWidget {
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
-  // final TextEditingController dobController = TextEditingController();
-  // final TextEditingController ageController = TextEditingController();
-  final TextEditingController imageController = TextEditingController();
   String? selectedGender;
-  String? pickedFilePath;
-  Uint8List? _imageBytes;
-
-/*
-  late DateTime selectedDate;
-  int age = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedDate = DateTime.now();
-  }
-
-  void _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-
-    if (picked != null) {
-      setState(() {
-        //dobController.text = picked.toString(); // Display selected date
-        dobController.text = DateFormat('dd-MM-yyyy')
-            .format(picked); // Display selected date in dd-MM-yyyy format
-      });
-    }
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        // Calculate age
-        final now = DateTime.now();
-        age = now.year -
-            picked.year -
-            ((now.month > picked.month ||
-                    (now.month == picked.month && now.day >= picked.day))
-                ? 0
-                : 1);
-
-        ageController.text = age.toString();
-      });
-    }
-  }
-  */
-
-  // Future<void> _uploadImage() async {
-
-  //   final picker = ImagePicker();
-  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       imageController.text = pickedFile.path;
-  //     });
-  //   }
-  // }
-
-  void _showImageSourceDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text('Select image source'),
-          children: <Widget>[
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context);
-                _getImage(ImageSource.camera);
-              },
-              child: const Text('Take Photo'),
-            ),
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context);
-                _getImage(ImageSource.gallery);
-              },
-              child: const Text('Choose from Gallery'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _getImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     imageController.text = pickedFile.path;
-    //     pickedFilePath = pickedFile.path;
-    //   });
-    // }
-
-    if (pickedFile != null) {
-      final fileBytes = await pickedFile.readAsBytes();
-      setState(() {
-        _imageBytes = Uint8List.fromList(fileBytes);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,75 +56,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               const SizedBox(
                 height: 26,
               ),
-              Row(
-                children: [
-                  // Expanded(
-                  //   child: TextFormField(
-                  //     readOnly: true,
-                  //     controller: imageController,
-                  //     enabled: false,
-                  //     decoration: const InputDecoration(
-                  //       labelText: 'Profile Pic',
-                  //     ),
-                  //   ),
-                  // ),
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: imageController,
-                      enabled: false,
-                      decoration: InputDecoration(
-                        labelText: 'Profile Pic',
-                        border: InputBorder.none,
-                        // suffixIcon: pickedFilePath != null
-                        //     ? SizedBox(
-                        //         width: 350,
-                        //         height: 100,
-                        //         child: Image.file(File(pickedFilePath!)),
-                        //       )
-                        //     : null,
-
-                        suffixIcon: _imageBytes != null
-                            ? Image.memory(
-                                _imageBytes!,
-                                width: 130,
-                                height: 130,
-                                fit: BoxFit.fill,
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _showImageSourceDialog,
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Set the border radius here
-                          ),
-                        ),
-                        side: const MaterialStatePropertyAll(
-                          BorderSide(color: Color.fromARGB(255, 180, 177, 177)),
-                        ),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 125, 124, 124)),
-                      ),
-                      child: const Text('Upload'),
-                    ),
-                  ),
-                  // Expanded(
-                  //   child: ElevatedButton(
-                  //     onPressed: _uploadImage,
-                  //     child: const Text('Upload'),
-                  //   ),
-                  // ),
-                ],
-              ),
+              const ImageUpload(),
               const SizedBox(
                 height: 26,
               ),
