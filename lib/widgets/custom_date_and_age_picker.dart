@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomDateAndAgePicker extends StatefulWidget {
-  const CustomDateAndAgePicker({super.key});
+  const CustomDateAndAgePicker({super.key, required this.onDateSelected});
+
+  final Function(String dob, int age) onDateSelected;
 
   @override
   State<CustomDateAndAgePicker> createState() => _CustomDateAndAgePickerState();
@@ -38,19 +40,24 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
     }
 
     if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        // Calculate age
-        final now = DateTime.now();
-        age = now.year -
-            picked.year -
-            ((now.month > picked.month ||
-                    (now.month == picked.month && now.day >= picked.day))
-                ? 0
-                : 1);
+      setState(
+        () {
+          selectedDate = picked;
+          // Calculate age
+          final now = DateTime.now();
+          age = now.year -
+              picked.year -
+              ((now.month > picked.month ||
+                      (now.month == picked.month && now.day >= picked.day))
+                  ? 0
+                  : 1);
 
-        ageController.text = age.toString();
-      });
+          ageController.text = age.toString();
+          // widget.onDateSelected(selectedDate.toString(), age);
+
+          widget.onDateSelected(DateFormat('dd-MM-yyyy').format(picked), age);
+        },
+      );
     }
   }
 

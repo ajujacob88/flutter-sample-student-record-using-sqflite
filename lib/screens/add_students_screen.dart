@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 //import 'dart:io';
-import 'package:sample_student_record_using_sqflite/widgets/custom_date_and _age_picker.dart';
+import 'package:sample_student_record_using_sqflite/widgets/custom_date_and_age_picker.dart';
 import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
+import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({super.key});
@@ -15,6 +15,49 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   String? selectedGender;
+
+  String _selectedDob = '';
+  int? _selectedAge;
+
+  void handleDateSelected(String dob, int age) {
+    //   print('Date of Birth: $dob, Age: $age');
+    _selectedDob = dob;
+    _selectedAge = age;
+  }
+
+  void _handleSubmit() {
+    String name = nameController.text;
+    String place = placeController.text;
+    String gender = selectedGender ?? '';
+
+    // Check if any field is empty
+    if (name.isEmpty ||
+        place.isEmpty ||
+        gender.isEmpty ||
+        _selectedDob.isEmpty) {
+      // Show a snackbar to inform the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          duration: Duration(seconds: 2), // Optional duration
+        ),
+      );
+      return;
+    }
+    Student student = Student(
+        name: nameController.text,
+        place: placeController.text,
+        gender: selectedGender,
+        dob: _selectedDob,
+        age: _selectedAge);
+
+    print('Student: $student, name = ${student.name}, dob= ${student.dob}');
+
+    nameController.clear();
+    placeController.clear();
+
+    selectedGender = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +84,21 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 height: 16,
               ),
               DropdownButtonFormField(
-                  hint: const Text('Select Gender'),
-                  items: ['Male', 'Female', 'Other']
-                      .map((gender) =>
-                          DropdownMenuItem(value: gender, child: Text(gender)))
-                      .toList(),
-                  onChanged: (value) {
-                    selectedGender = value.toString();
-                  }),
+                hint: const Text('Select Gender'),
+                items: ['Male', 'Female', 'Other']
+                    .map((gender) =>
+                        DropdownMenuItem(value: gender, child: Text(gender)))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedGender = value;
+                  });
+                },
+              ),
               const SizedBox(
                 height: 16,
               ),
-              const CustomDateAndAgePicker(),
+              CustomDateAndAgePicker(onDateSelected: handleDateSelected),
               const SizedBox(
                 height: 26,
               ),
@@ -61,7 +107,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 height: 26,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _handleSubmit,
+                // onPressed: () {
+                //   print(' gender is $selectedGender');
+                // },
                 child: const Text('Submit'),
               ),
             ],
