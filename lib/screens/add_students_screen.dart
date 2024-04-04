@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'dart:io';
 import 'dart:typed_data';
+import 'package:sample_student_record_using_sqflite/widgets/custom_date_and _age_picker.dart';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({super.key});
@@ -14,13 +15,14 @@ class AddStudentsScreen extends StatefulWidget {
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-  final TextEditingController ageController = TextEditingController();
+  // final TextEditingController dobController = TextEditingController();
+  // final TextEditingController ageController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
   String? selectedGender;
   String? pickedFilePath;
   Uint8List? _imageBytes;
 
+/*
   late DateTime selectedDate;
   int age = 0;
 
@@ -62,6 +64,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       });
     }
   }
+  */
 
   // Future<void> _uploadImage() async {
 
@@ -157,53 +160,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               const SizedBox(
                 height: 16,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Stack(
-                      children: [
-                        TextFormField(
-                          readOnly: true,
-                          controller: dobController,
-                          decoration: InputDecoration(
-                            labelText: 'Date of Birth',
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.calendar_today),
-                              onPressed: () => _selectDate(context),
-                            ),
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                _selectDate(context);
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: TextFormField(
-                      readOnly: true,
-                      enabled: false,
-                      controller: ageController,
-                      decoration: const InputDecoration(
-                        labelText: 'Age',
-                        // floatingLabelBehavior: FloatingLabelBehavior.never
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              const CustomDateAndAgePicker(),
               const SizedBox(
                 height: 26,
               ),
