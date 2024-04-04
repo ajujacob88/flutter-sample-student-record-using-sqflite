@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomDateAndAgePicker extends StatefulWidget {
-  const CustomDateAndAgePicker({super.key, required this.onDateSelected});
+  const CustomDateAndAgePicker(
+      {super.key, required this.onDateSelected, required this.onClear});
 
   final Function(String dob, int age) onDateSelected;
+
+  final Function onClear;
 
   @override
   State<CustomDateAndAgePicker> createState() => _CustomDateAndAgePickerState();

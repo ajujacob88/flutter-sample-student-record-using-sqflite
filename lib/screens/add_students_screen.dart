@@ -12,6 +12,8 @@ class AddStudentsScreen extends StatefulWidget {
 }
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
+  // final GlobalKey<FormState> _formKey =      GlobalKey<FormState>(); // Create a GlobalKey
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   String? selectedGender;
@@ -20,7 +22,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   int? _selectedAge;
 
   void handleDateSelected(String dob, int age) {
-    //   print('Date of Birth: $dob, Age: $age');
+    print('Date of Birth: $dob, Age: $age');
     _selectedDob = dob;
     _selectedAge = age;
   }
@@ -53,10 +55,29 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
     print('Student: $student, name = ${student.name}, dob= ${student.dob}');
 
-    nameController.clear();
-    placeController.clear();
+    // Show a snackbar to inform the user
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Form submitted successfully'),
+        duration: Duration(seconds: 2), // Optional duration
+      ),
+    );
 
-    selectedGender = null;
+    void clearDates() {
+      // Access the CustomDateAndAgePicker widget's state
+      final state =
+          context.findAncestorStateOfType<_CustomDateAndAgePickerState>();
+      if (state != null) {
+        state.clearDate();
+      }
+    }
+
+    // final form = _formKey.currentState;
+    // if (form != null) {
+    //   form.reset();
+    //   FocusScope.of(context).unfocus(); // Remove focus from any fields
+    //   setState(() {}); // Optional: Force a visual update
+    // }
   }
 
   @override
@@ -66,54 +87,70 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              TextFormField(
-                controller: placeController,
-                decoration: const InputDecoration(labelText: 'Place'),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              DropdownButtonFormField(
-                hint: const Text('Select Gender'),
-                items: ['Male', 'Female', 'Other']
-                    .map((gender) =>
-                        DropdownMenuItem(value: gender, child: Text(gender)))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              CustomDateAndAgePicker(onDateSelected: handleDateSelected),
-              const SizedBox(
-                height: 26,
-              ),
-              const ImageUpload(),
-              const SizedBox(
-                height: 26,
-              ),
-              ElevatedButton(
-                onPressed: _handleSubmit,
-                // onPressed: () {
-                //   print(' gender is $selectedGender');
-                // },
-                child: const Text('Submit'),
-              ),
-            ],
+          child: Form(
+            //  key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        nameController.clear();
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                TextFormField(
+                  controller: placeController,
+                  decoration: const InputDecoration(labelText: 'Place'),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                DropdownButtonFormField(
+                  hint: const Text('Select Gender'),
+                  items: ['Male', 'Female', 'Other']
+                      .map((gender) =>
+                          DropdownMenuItem(value: gender, child: Text(gender)))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedGender = value;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                CustomDateAndAgePicker(
+                  onDateSelected: handleDateSelected,
+                  onClear: clearDates,
+                ),
+                const SizedBox(
+                  height: 26,
+                ),
+                const ImageUpload(),
+                const SizedBox(
+                  height: 26,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _handleSubmit();
+                  },
+                  // onPressed: () {
+                  //   print(' gender is $selectedGender');
+                  // },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
