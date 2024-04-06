@@ -1,10 +1,12 @@
+import 'dart:typed_data';
+
 class Student {
   String? name;
   String? place;
   String? gender;
   String? dob;
   int? age;
-  String? imagePath;
+  Uint8List? imagePath;
 
   Student({
     required this.name,

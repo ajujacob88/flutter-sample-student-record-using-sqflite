@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload({super.key});
+  const ImageUpload({super.key, required this.onSelectImage});
+
+  final Function onSelectImage;
 
   @override
   State<ImageUpload> createState() => _ImageUploadState();
@@ -58,6 +60,8 @@ class _ImageUploadState extends State<ImageUpload> {
         _imageBytes = Uint8List.fromList(fileBytes);
       });
     }
+
+    widget.onSelectImage(_imageBytes);
   }
 
   @override

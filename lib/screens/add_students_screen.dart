@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 //import 'dart:io';
 import 'package:sample_student_record_using_sqflite/widgets/custom_date_and_age_picker.dart';
@@ -18,6 +20,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
   String _selectedDob = '';
   int? _selectedAge;
+  Uint8List? _imageBytes;
+
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   GlobalKey<FormFieldState> newKeyForDropDownButton =
@@ -33,6 +37,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       TextEditingController dobControll, TextEditingController ageControll) {
     dobController = dobControll;
     ageController = ageControll;
+  }
+
+  void handleImageSelected(Uint8List imageBytes) {
+    _imageBytes = imageBytes;
   }
 
   void _handleSubmit() {
@@ -60,9 +68,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
         place: placeController.text,
         gender: selectedGender,
         dob: _selectedDob,
-        age: _selectedAge);
-
-    print('Student: $student, name = ${student.name}, dob= ${student.dob}');
+        age: _selectedAge,
+        imagePath: _imageBytes);
 
     // Show a snackbar to inform the user
     ScaffoldMessenger.of(context).showSnackBar(
@@ -81,7 +88,18 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     newKeyForDropDownButton.currentState!.reset();
 
     print(
-      'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}',
+        'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, $_imageBytes');
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Image.memory(
+          _imageBytes!,
+          width: 130,
+          height: 130,
+          fit: BoxFit.fill,
+        ),
+        duration: Duration(seconds: 20), // Optional duration
+      ),
     );
   }
 
@@ -153,7 +171,9 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               const SizedBox(
                 height: 26,
               ),
-              const ImageUpload(),
+              ImageUpload(
+                onSelectImage: handleImageSelected,
+              ),
               const SizedBox(
                 height: 26,
               ),
