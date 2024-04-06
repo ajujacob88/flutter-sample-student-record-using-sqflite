@@ -3,18 +3,38 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload({super.key, required this.onSelectImage});
+  const ImageUpload({super.key, required this.onSelectImage, this.clearImage});
 
   final Function onSelectImage;
 
+  final Function? clearImage;
+
   @override
   State<ImageUpload> createState() => _ImageUploadState();
+
+  // Static method to create a GlobalKey
+  static GlobalKey<_ImageUploadState> imageUploadKey =
+      GlobalKey<_ImageUploadState>();
 }
 
 class _ImageUploadState extends State<ImageUpload> {
   final TextEditingController imageController = TextEditingController();
   String? pickedFilePath;
   Uint8List? _imageBytes;
+
+  clearImageThis() {
+    print('Debug Chek 2 calling function debug');
+    setState(() {
+      _imageBytes = null;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Assign the state to the static GlobalKey
+    ImageUpload.imageUploadKey = GlobalKey<_ImageUploadState>();
+  }
 
   void _showImageSourceDialog() {
     showDialog(
@@ -61,7 +81,7 @@ class _ImageUploadState extends State<ImageUpload> {
       });
     }
 
-    widget.onSelectImage(_imageBytes);
+    widget.onSelectImage(_imageBytes, imageController);
   }
 
   @override

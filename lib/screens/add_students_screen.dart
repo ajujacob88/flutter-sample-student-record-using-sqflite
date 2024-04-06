@@ -14,9 +14,22 @@ class AddStudentsScreen extends StatefulWidget {
 }
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
+  // ImageUpload? imageUploadWidget; // Instance of ImageUpload
+
+  // void clearImage() {
+  //   imageUploadWidget?.clearImage?.call(setState(() {
+  //     _imageBytes = null;
+  //   })); // Call the clear function if available
+
+  //   print('check calling clea image ajuuuuuuuuuuuuuuuuuuuuuuuuuuu');
+  // }
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   String? selectedGender;
+
+  // ImageUpload imga = ImageUpload(onSelectImage: () {});
+  // ImageUpload? img2;
 
   String _selectedDob = '';
   int? _selectedAge;
@@ -24,6 +37,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+
   GlobalKey<FormFieldState> newKeyForDropDownButton =
       GlobalKey<FormFieldState>();
 
@@ -39,8 +54,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     ageController = ageControll;
   }
 
-  void handleImageSelected(Uint8List imageBytes) {
+  void handleImageSelected(
+      Uint8List imageBytes, TextEditingController imageControll) {
     _imageBytes = imageBytes;
+    imageController = imageControll;
   }
 
   void _handleSubmit() {
@@ -48,6 +65,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     String place = placeController.text;
     String gender = selectedGender ?? '';
 
+/*
     // Check if any field is empty
     if (name.isEmpty ||
         place.isEmpty ||
@@ -62,6 +80,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       );
       return;
     }
+    */
 
     Student student = Student(
         name: nameController.text,
@@ -84,23 +103,22 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     placeController.clear();
     dobController.clear();
     ageController.clear();
+    imageController.clear();
+
+    //clearing image
+    // setState(() {
+    //   _imageBytes = null;
+    // });
+
+    // imga.clearImage;
+    // img2!.clearImage;
+
     //clearing the drop down button form field
     newKeyForDropDownButton.currentState!.reset();
+    ImageUpload.imageUploadKey.currentState?.clearImageThis();
 
     print(
         'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, $_imageBytes');
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Image.memory(
-          _imageBytes!,
-          width: 130,
-          height: 130,
-          fit: BoxFit.fill,
-        ),
-        duration: Duration(seconds: 20), // Optional duration
-      ),
-    );
   }
 
   @override
@@ -172,13 +190,20 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 height: 26,
               ),
               ImageUpload(
+                key: ImageUpload.imageUploadKey,
                 onSelectImage: handleImageSelected,
+                //  clearImage: clearImage,
               ),
               const SizedBox(
                 height: 26,
               ),
               ElevatedButton(
                 onPressed: () {
+                  // print('debug1');
+                  //  clearImage();
+                  // print(
+                  //     'currentState: ${ImageUpload.imageUploadKey.currentState}');
+
                   _handleSubmit();
                 },
                 // onPressed: () {
