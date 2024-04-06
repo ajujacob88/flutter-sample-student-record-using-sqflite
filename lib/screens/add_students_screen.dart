@@ -14,22 +14,9 @@ class AddStudentsScreen extends StatefulWidget {
 }
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
-  // ImageUpload? imageUploadWidget; // Instance of ImageUpload
-
-  // void clearImage() {
-  //   imageUploadWidget?.clearImage?.call(setState(() {
-  //     _imageBytes = null;
-  //   })); // Call the clear function if available
-
-  //   print('check calling clea image ajuuuuuuuuuuuuuuuuuuuuuuuuuuu');
-  // }
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   String? selectedGender;
-
-  // ImageUpload imga = ImageUpload(onSelectImage: () {});
-  // ImageUpload? img2;
 
   String _selectedDob = '';
   int? _selectedAge;
@@ -65,7 +52,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     String place = placeController.text;
     String gender = selectedGender ?? '';
 
-/*
     // Check if any field is empty
     if (name.isEmpty ||
         place.isEmpty ||
@@ -80,7 +66,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       );
       return;
     }
-    */
 
     Student student = Student(
         name: nameController.text,
@@ -110,12 +95,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     //   _imageBytes = null;
     // });
 
-    // imga.clearImage;
-    // img2!.clearImage;
-
     //clearing the drop down button form field
     newKeyForDropDownButton.currentState!.reset();
-    ImageUpload.imageUploadKey.currentState?.clearImageThis();
+    //clearing the image field, calling the clear image function
+    ImageUpload.imageUploadKey.currentState?.clearImage();
 
     print(
         'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, $_imageBytes');
