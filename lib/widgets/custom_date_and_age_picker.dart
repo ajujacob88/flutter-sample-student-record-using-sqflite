@@ -7,7 +7,9 @@ class CustomDateAndAgePicker extends StatefulWidget {
 
   final Function(String dob, int age) onDateSelected;
 
-  final Function onClear;
+  final Function(
+          TextEditingController dobControl, TextEditingController ageControl)
+      onClear;
 
   @override
   State<CustomDateAndAgePicker> createState() => _CustomDateAndAgePickerState();
@@ -59,6 +61,7 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
           // widget.onDateSelected(selectedDate.toString(), age);
 
           widget.onDateSelected(DateFormat('dd-MM-yyyy').format(picked), age);
+          widget.onClear(dobController, ageController);
         },
       );
     }

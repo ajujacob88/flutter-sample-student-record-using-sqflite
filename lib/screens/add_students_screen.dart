@@ -12,19 +12,25 @@ class AddStudentsScreen extends StatefulWidget {
 }
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
-  // final GlobalKey<FormState> _formKey =      GlobalKey<FormState>(); // Create a GlobalKey
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   String? selectedGender;
 
   String _selectedDob = '';
   int? _selectedAge;
+  TextEditingController dobController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
   void handleDateSelected(String dob, int age) {
     print('Date of Birth: $dob, Age: $age');
     _selectedDob = dob;
     _selectedAge = age;
+  }
+
+  void handleDobControllers(
+      TextEditingController dobControll, TextEditingController ageControll) {
+    dobController = dobControll;
+    ageController = ageControll;
   }
 
   void _handleSubmit() {
@@ -63,21 +69,11 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       ),
     );
 
-    void clearDates() {
-      // Access the CustomDateAndAgePicker widget's state
-      final state =
-          context.findAncestorStateOfType<_CustomDateAndAgePickerState>();
-      if (state != null) {
-        state.clearDate();
-      }
-    }
-
-    // final form = _formKey.currentState;
-    // if (form != null) {
-    //   form.reset();
-    //   FocusScope.of(context).unfocus(); // Remove focus from any fields
-    //   setState(() {}); // Optional: Force a visual update
-    // }
+    //now clear the controllers
+    nameController.clear();
+    placeController.clear();
+    dobController.clear();
+    ageController.clear();
   }
 
   @override
@@ -131,7 +127,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ),
                 CustomDateAndAgePicker(
                   onDateSelected: handleDateSelected,
-                  onClear: clearDates,
+                  onClear: handleDobControllers,
                 ),
                 const SizedBox(
                   height: 26,
