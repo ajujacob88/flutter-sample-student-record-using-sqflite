@@ -20,6 +20,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   int? _selectedAge;
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
+  GlobalKey<FormFieldState> newKeyForDropDownButton =
+      GlobalKey<FormFieldState>();
 
   void handleDateSelected(String dob, int age) {
     print('Date of Birth: $dob, Age: $age');
@@ -52,6 +54,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       );
       return;
     }
+
     Student student = Student(
         name: nameController.text,
         place: placeController.text,
@@ -69,11 +72,17 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       ),
     );
 
-    //now clear the controllers
+    // now clear the controllers
     nameController.clear();
     placeController.clear();
     dobController.clear();
     ageController.clear();
+    //clearing the drop down button form field
+    newKeyForDropDownButton.currentState!.reset();
+
+    print(
+      'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}',
+    );
   }
 
   @override
@@ -83,70 +92,81 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
-          child: Form(
-            //  key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        nameController.clear();
-                      },
-                    ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      nameController.clear();
+                    },
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                controller: placeController,
+                decoration: const InputDecoration(labelText: 'Place'),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              DropdownButtonFormField(
+                key: newKeyForDropDownButton,
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context)
+                            .dividerColor), // Optional colored border on focus
+                  ),
                 ),
-                TextFormField(
-                  controller: placeController,
-                  decoration: const InputDecoration(labelText: 'Place'),
+                hint: const Text(
+                  'Select Gender',
+                  style: TextStyle(
+                    // Match the body text color
+                    fontWeight: FontWeight.normal, // Match the font weight
+                  ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                DropdownButtonFormField(
-                  hint: const Text('Select Gender'),
-                  items: ['Male', 'Female', 'Other']
-                      .map((gender) =>
-                          DropdownMenuItem(value: gender, child: Text(gender)))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedGender = value;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                CustomDateAndAgePicker(
-                  onDateSelected: handleDateSelected,
-                  onClear: handleDobControllers,
-                ),
-                const SizedBox(
-                  height: 26,
-                ),
-                const ImageUpload(),
-                const SizedBox(
-                  height: 26,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _handleSubmit();
-                  },
-                  // onPressed: () {
-                  //   print(' gender is $selectedGender');
-                  // },
-                  child: const Text('Submit'),
-                ),
-              ],
-            ),
+                items: ['Male', 'Female', 'Other']
+                    .map((gender) =>
+                        DropdownMenuItem(value: gender, child: Text(gender)))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedGender = value;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              CustomDateAndAgePicker(
+                onDateSelected: handleDateSelected,
+                onClear: handleDobControllers,
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              const ImageUpload(),
+              const SizedBox(
+                height: 26,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _handleSubmit();
+                },
+                // onPressed: () {
+                //   print(' gender is $selectedGender');
+                // },
+                child: const Text('Submit'),
+              ),
+            ],
           ),
         ),
       ),
