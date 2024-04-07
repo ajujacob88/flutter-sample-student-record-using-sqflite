@@ -51,7 +51,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     String name = nameController.text;
     String place = placeController.text;
     String gender = selectedGender ?? '';
-
+/*
     // Check if any field is empty
     if (name.isEmpty ||
         place.isEmpty ||
@@ -66,6 +66,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       );
       return;
     }
+    */
 
     Student student = Student(
         name: nameController.text,
@@ -98,10 +99,11 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     //clearing the drop down button form field
     newKeyForDropDownButton.currentState!.reset();
     //clearing the image field, calling the clear image function
-    ImageUpload.imageUploadKey.currentState?.clearImage();
+    // ImageUpload.imageUploadKey.currentState?.clearImage();
 
     print(
         'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, $_imageBytes');
+    // ImageUpload.imageUploadKey.currentState?.clearImage();
   }
 
   @override
@@ -175,7 +177,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               ImageUpload(
                 key: ImageUpload.imageUploadKey,
                 onSelectImage: handleImageSelected,
-                //  clearImage: clearImage,
               ),
               const SizedBox(
                 height: 26,

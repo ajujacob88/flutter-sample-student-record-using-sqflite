@@ -20,18 +20,19 @@ class _ImageUploadState extends State<ImageUpload> {
   String? pickedFilePath;
   Uint8List? _imageBytes;
 
-  clearImage() {
-    print('Debug Chek 2 calling function debug');
-    setState(() {
-      _imageBytes = null;
-    });
-  }
+  // clearImage() {
+  //   print(
+  //       'Debug Chek 2 calling function debugggggggggggggggggggggggggggggggggggggg');
+  //   setState(() {
+  //     _imageBytes = null;
+  //   });
+  // }
 
   @override
   void initState() {
-    super.initState();
     // Assign the state to the static GlobalKey
     ImageUpload.imageUploadKey = GlobalKey<_ImageUploadState>();
+    super.initState();
   }
 
   void _showImageSourceDialog() {
