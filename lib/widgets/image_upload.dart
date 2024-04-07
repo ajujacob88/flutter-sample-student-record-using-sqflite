@@ -3,16 +3,19 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload({super.key, required this.onSelectImage});
+  const ImageUpload(
+      {super.key, required this.onSelectImage, required this.forClearImage});
 
   final Function onSelectImage;
+
+  final void Function(Function) forClearImage;
 
   @override
   State<ImageUpload> createState() => _ImageUploadState();
 
   // Static method to create a GlobalKey
-  static GlobalKey<_ImageUploadState> imageUploadKey =
-      GlobalKey<_ImageUploadState>();
+  // static GlobalKey<_ImageUploadState> imageUploadKey =
+  //     GlobalKey<_ImageUploadState>();
 }
 
 class _ImageUploadState extends State<ImageUpload> {
@@ -20,18 +23,21 @@ class _ImageUploadState extends State<ImageUpload> {
   String? pickedFilePath;
   Uint8List? _imageBytes;
 
-  // clearImage() {
-  //   print(
-  //       'Debug Chek 2 calling function debugggggggggggggggggggggggggggggggggggggg');
-  //   setState(() {
-  //     _imageBytes = null;
-  //   });
-  // }
+  clearImage() {
+    print(
+        'Debug Chek 2 calling function debugggggggggggggggggggggggggggggggggggggg $_imageBytes');
+
+    setState(() {
+      _imageBytes = null;
+    });
+    print(
+        'after Chek 2 calling function debugggggggggggggggggggggggggggggggggggggg $_imageBytes');
+  }
 
   @override
   void initState() {
     // Assign the state to the static GlobalKey
-    ImageUpload.imageUploadKey = GlobalKey<_ImageUploadState>();
+    //  ImageUpload.imageUploadKey = GlobalKey<_ImageUploadState>();
     super.initState();
   }
 
@@ -81,6 +87,7 @@ class _ImageUploadState extends State<ImageUpload> {
     }
 
     widget.onSelectImage(_imageBytes, imageController);
+    widget.forClearImage(clearImage);
   }
 
   @override

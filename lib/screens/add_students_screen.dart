@@ -47,6 +47,14 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     imageController = imageControll;
   }
 
+  Function? clr;
+
+  void forClearImage2(Function clearimg) {
+    print('debug clling this clearIMG');
+    clr = clearimg;
+    print('clr is $clr');
+  }
+
   void _handleSubmit() {
     String name = nameController.text;
     String place = placeController.text;
@@ -175,7 +183,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 height: 26,
               ),
               ImageUpload(
-                key: ImageUpload.imageUploadKey,
+                //   key: ImageUpload.imageUploadKey,
+                forClearImage: forClearImage2,
                 onSelectImage: handleImageSelected,
               ),
               const SizedBox(
@@ -183,10 +192,16 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // print('debug1');
+                  print('debug11');
                   //  clearImage();
                   // print(
                   //     'currentState: ${ImageUpload.imageUploadKey.currentState}');
+                  print('printing clr $clr');
+                  clr!();
+                  print('printing clr $clr');
+                  clr!();
+
+                  print('debug22');
 
                   _handleSubmit();
                 },
