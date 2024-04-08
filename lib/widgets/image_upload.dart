@@ -65,25 +65,38 @@ class _ImageUploadState extends State<ImageUpload> {
   }
 
   Future<void> _getImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: source);
 
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     imageController.text = pickedFile.path;
-    //     pickedFilePath = pickedFile.path;
-    //   });
-    // }
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     imageController.text = pickedFile.path;
+      //     pickedFilePath = pickedFile.path;
+      //   });
+      // }
 
-    if (pickedFile != null) {
-      final fileBytes = await pickedFile.readAsBytes();
-      setState(() {
-        _imageBytes = Uint8List.fromList(fileBytes);
-      });
+      if (pickedFile != null) {
+        final fileBytes = await pickedFile.readAsBytes();
+        setState(() {
+          _imageBytes = Uint8List.fromList(fileBytes);
+        });
+      }
+
+      widget.onSelectImage(_imageBytes, imageController, clearImage);
+      //  widget.forClearImage(clearImage);
+    } on Exception catch (e) {
+// Handle permission errors or other platform exceptions
+      if (mounted) {
+        print('Error picking image: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error accessing gallery. Please check permissions.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
-
-    widget.onSelectImage(_imageBytes, imageController, clearImage);
-    //  widget.forClearImage(clearImage);
   }
 
   @override

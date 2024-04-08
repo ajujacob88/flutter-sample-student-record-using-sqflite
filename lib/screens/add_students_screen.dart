@@ -27,8 +27,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   TextEditingController ageController = TextEditingController();
   TextEditingController imageController = TextEditingController();
 
-  GlobalKey<FormFieldState> newKeyForDropDownButton =
-      GlobalKey<FormFieldState>();
+  GlobalKey<FormFieldState<String>> newKeyForDropDownButton =
+      GlobalKey<FormFieldState<String>>();
 
   void handleDateSelected(String dob, int age) {
     print('Date of Birth: $dob, Age: $age');
