@@ -41,19 +41,20 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     ageController = ageControll;
   }
 
-  void handleImageSelected(
-      Uint8List imageBytes, TextEditingController imageControll) {
-    _imageBytes = imageBytes;
-    imageController = imageControll;
-  }
-
   Function? clr;
 
-  void forClearImage2(Function clearimg) {
-    print('debug clling this clearIMG');
-    clr = clearimg;
-    print('clr is $clr');
+  void handleImageSelected(Uint8List? imageBytes,
+      TextEditingController imageControll, Function func) {
+    _imageBytes = imageBytes;
+    imageController = imageControll;
+    clr = func;
   }
+
+  // void forClearImage2(Function clearimg) {
+  //   print('debug clling this clearIMG');
+  //   clr = clearimg;
+  //   print('clr is $clr');
+  // }
 
   void _handleSubmit() {
     String name = nameController.text;
@@ -184,7 +185,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               ),
               ImageUpload(
                 //   key: ImageUpload.imageUploadKey,
-                forClearImage: forClearImage2,
+                //  forClearImage: forClearImage2,
                 onSelectImage: handleImageSelected,
               ),
               const SizedBox(
@@ -197,9 +198,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   // print(
                   //     'currentState: ${ImageUpload.imageUploadKey.currentState}');
                   print('printing clr $clr');
-                  clr!();
+                  // clr!();
                   print('printing clr $clr');
-                  clr!();
 
                   print('debug22');
 
