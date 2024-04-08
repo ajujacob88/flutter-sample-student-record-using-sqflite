@@ -56,24 +56,24 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   // }
 
   void _handleSubmit() {
-    String name = nameController.text;
-    String place = placeController.text;
-    String gender = selectedGender ?? '';
+    // String name = nameController.text;
+    // String place = placeController.text;
+    // String gender = selectedGender ?? '';
 
     // Check if any field is empty
-    if (name.isEmpty ||
-        place.isEmpty ||
-        gender.isEmpty ||
-        _selectedDob.isEmpty) {
-      // Show a snackbar to inform the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          duration: Duration(seconds: 2), // Optional duration
-        ),
-      );
-      return;
-    }
+    // if (name.isEmpty ||
+    //     place.isEmpty ||
+    //     gender.isEmpty ||
+    //     _selectedDob.isEmpty) {
+    //   // Show a snackbar to inform the user
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text('Please fill in all fields'),
+    //       duration: Duration(seconds: 2), // Optional duration
+    //     ),
+    //   );
+    //   return;
+    // }
 
     Student student = Student(
         name: nameController.text,
@@ -116,6 +116,9 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
         'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, ${student.imagePath}');
   }
 
+  final _formKey = GlobalKey<FormState>();
+  var _hasError = false; // Flag to track validation state
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,83 +126,113 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      nameController.clear();
-                    },
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        nameController.clear();
+                      },
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the name';
+                    }
+                    return value.length < 3
+                        ? 'Name must be at least 3 to 30 characters long'
+                        : null;
+                  },
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              TextFormField(
-                controller: placeController,
-                decoration: const InputDecoration(labelText: 'Place'),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              DropdownButtonFormField(
-                key: newKeyForDropDownButton,
-                decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context)
-                            .dividerColor), // Optional colored border on focus
+                const SizedBox(
+                  height: 13,
+                ),
+                TextFormField(
+                  controller: placeController,
+                  decoration: const InputDecoration(labelText: 'Place'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the place';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                DropdownButtonFormField(
+                  key: newKeyForDropDownButton,
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context)
+                              .dividerColor), // Optional colored border on focus
+                    ),
                   ),
-                ),
-                hint: const Text(
-                  'Select Gender',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal, // Match the font weight
+                  hint: Text(
+                    'Select Gender',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: _hasError
+                          ? const Color.fromARGB(255, 173, 49, 40)
+                          : null,
+                    ), // Match the font weight
                   ),
+                  items: ['Male', 'Female', 'Other']
+                      .map((gender) =>
+                          DropdownMenuItem(value: gender, child: Text(gender)))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedGender = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      setState(() {
+                        _hasError = true;
+                      });
+
+                      return 'Please select the gender';
+                    }
+                    return null;
+                  },
                 ),
-                items: ['Male', 'Female', 'Other']
-                    .map((gender) =>
-                        DropdownMenuItem(value: gender, child: Text(gender)))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              CustomDateAndAgePicker(
-                onDateSelected: handleDateSelected,
-                onClear: handleDobControllers,
-              ),
-              const SizedBox(
-                height: 26,
-              ),
-              ImageUpload(
-                //  forClearImage: forClearImage2,
-                onSelectImage: handleImageSelected,
-              ),
-              const SizedBox(
-                height: 26,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _handleSubmit();
-                },
-                // onPressed: () {
-                //   print(' gender is $selectedGender');
-                // },
-                child: const Text('Submit'),
-              ),
-            ],
+                const SizedBox(
+                  height: 16,
+                ),
+                CustomDateAndAgePicker(
+                  onDateSelected: handleDateSelected,
+                  onClear: handleDobControllers,
+                ),
+                const SizedBox(
+                  height: 26,
+                ),
+                ImageUpload(
+                  //  forClearImage: forClearImage2,
+                  onSelectImage: handleImageSelected,
+                ),
+                const SizedBox(
+                  height: 26,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _handleSubmit();
+                    }
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

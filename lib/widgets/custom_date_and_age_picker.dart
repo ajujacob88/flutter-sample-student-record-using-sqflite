@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class CustomDateAndAgePicker extends StatefulWidget {
@@ -8,8 +9,9 @@ class CustomDateAndAgePicker extends StatefulWidget {
   final Function(String dob, int age) onDateSelected;
 
   final Function(
-          TextEditingController dobControl, TextEditingController ageControl)
-      onClear;
+    TextEditingController dobControl,
+    TextEditingController ageControl,
+  ) onClear;
 
   @override
   State<CustomDateAndAgePicker> createState() => _CustomDateAndAgePickerState();
@@ -85,6 +87,12 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
                     onPressed: () => _selectDate(context),
                   ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the date of birth';
+                  }
+                  return null;
+                },
               ),
               Positioned.fill(
                 child: Material(
