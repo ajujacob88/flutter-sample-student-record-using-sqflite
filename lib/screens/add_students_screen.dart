@@ -21,6 +21,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   String _selectedDob = '';
   int? _selectedAge;
   Uint8List? _imageBytes;
+  Function? clearImg;
 
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
@@ -41,13 +42,11 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     ageController = ageControll;
   }
 
-  Function? clr;
-
   void handleImageSelected(Uint8List? imageBytes,
-      TextEditingController imageControll, Function func) {
+      TextEditingController imageControll, Function clearImage) {
     _imageBytes = imageBytes;
     imageController = imageControll;
-    clr = func;
+    clearImg = clearImage;
   }
 
   // void forClearImage2(Function clearimg) {
@@ -60,7 +59,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     String name = nameController.text;
     String place = placeController.text;
     String gender = selectedGender ?? '';
-/*
+
     // Check if any field is empty
     if (name.isEmpty ||
         place.isEmpty ||
@@ -75,7 +74,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       );
       return;
     }
-    */
 
     Student student = Student(
         name: nameController.text,
@@ -105,12 +103,17 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
     //clearing the drop down button form field
     newKeyForDropDownButton.currentState!.reset();
-    //clearing the image field, calling the clear image function
-    // ImageUpload.imageUploadKey.currentState?.clearImage();
+
+    //clearing the image bytes
+    if (clearImg != null) {
+      clearImg!();
+    }
+    _imageBytes = null;
+
+    clearImg = null;
 
     print(
-        'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, $_imageBytes');
-    // ImageUpload.imageUploadKey.currentState?.clearImage();
+        'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, ${student.imagePath}');
   }
 
   @override
@@ -157,7 +160,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 hint: const Text(
                   'Select Gender',
                   style: TextStyle(
-                    // Match the body text color
                     fontWeight: FontWeight.normal, // Match the font weight
                   ),
                 ),
@@ -182,7 +184,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 height: 26,
               ),
               ImageUpload(
-                //   key: ImageUpload.imageUploadKey,
                 //  forClearImage: forClearImage2,
                 onSelectImage: handleImageSelected,
               ),
@@ -191,21 +192,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print('debug11');
-                  //  clearImage();
-                  // print(
-                  //     'currentState: ${ImageUpload.imageUploadKey.currentState}');
-                  print('printing clr $clr');
-                  if (clr != null) {
-                    clr!();
-                  }
-                  _imageBytes = null;
-
-                  clr = null;
-                  print('printing clr again $clr');
-
-                  print('debug22');
-
                   _handleSubmit();
                 },
                 // onPressed: () {

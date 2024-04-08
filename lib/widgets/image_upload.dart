@@ -19,10 +19,6 @@ class ImageUpload extends StatefulWidget {
 
   @override
   State<ImageUpload> createState() => _ImageUploadState();
-
-  // Static method to create a GlobalKey
-  // static GlobalKey<_ImageUploadState> imageUploadKey =
-  //     GlobalKey<_ImageUploadState>();
 }
 
 class _ImageUploadState extends State<ImageUpload> {
@@ -31,22 +27,15 @@ class _ImageUploadState extends State<ImageUpload> {
   Uint8List? _imageBytes;
 
   clearImage() {
-    print(
-        'Debug Chek 2 calling function debugggggggggggggggggggggggggggggggggggggg $_imageBytes');
-
     setState(() {
       _imageBytes = null;
     });
-    print(
-        'after Chek 2 calling function debugggggggggggggggggggggggggggggggggggggg $_imageBytes');
   }
 
-  @override
-  void initState() {
-    // Assign the state to the static GlobalKey
-    //  ImageUpload.imageUploadKey = GlobalKey<_ImageUploadState>();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //    super.initState();
+  // }
 
   void _showImageSourceDialog() {
     showDialog(
