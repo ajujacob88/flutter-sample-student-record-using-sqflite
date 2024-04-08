@@ -8,14 +8,14 @@ class ImageUpload extends StatefulWidget {
     required this.onSelectImage,
   });
 
-  final Function onSelectImage;
+  // final Function onSelectImage;
 
   //final Function forClearImage;
 
   // final void Function(Function) forClearImage;
 
-  // final void Function(Uint8List?, TextEditingController, Function)
-  //     onSelectImage;
+  final void Function(Uint8List?, TextEditingController, Function)
+      onSelectImage;
 
   @override
   State<ImageUpload> createState() => _ImageUploadState();

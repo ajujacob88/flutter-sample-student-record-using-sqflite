@@ -100,10 +100,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     ageController.clear();
     imageController.clear();
 
-    //clearing image
-    // setState(() {
-    //   _imageBytes = null;
-    // });
+    _selectedDob = '';
+    _selectedAge = null;
 
     //clearing the drop down button form field
     newKeyForDropDownButton.currentState!.reset();
@@ -198,8 +196,13 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                   // print(
                   //     'currentState: ${ImageUpload.imageUploadKey.currentState}');
                   print('printing clr $clr');
-                  // clr!();
-                  print('printing clr $clr');
+                  if (clr != null) {
+                    clr!();
+                  }
+                  _imageBytes = null;
+
+                  clr = null;
+                  print('printing clr again $clr');
 
                   print('debug22');
 
