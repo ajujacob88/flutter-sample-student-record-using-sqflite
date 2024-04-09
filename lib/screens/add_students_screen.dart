@@ -114,16 +114,12 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
     print(
         'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, ${student.imagePath}');
-
-    setState(() {
-      _autovalidationflag = true;
-    });
   }
 
   final _formKey = GlobalKey<FormState>();
   var _hasError = false; // Flag to track validation state
 
-  var _autovalidationflag = false;
+  // var _autovalidationflag = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,10 +152,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                         ? 'Name must be at least 3 to 30 characters long'
                         : null;
                   },
-                  //    autovalidateMode: AutovalidateMode.onUserInteraction,
-                  autovalidateMode: _autovalidationflag
-                      ? AutovalidateMode.disabled
-                      : AutovalidateMode.onUserInteraction,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  // autovalidateMode: _autovalidationflag
+                  //     ? AutovalidateMode.disabled
+                  //     : AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(
                   height: 13,
@@ -173,10 +169,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                     }
                     return null;
                   },
-                  //autovalidateMode: AutovalidateMode.onUserInteraction,
-                  autovalidateMode: _autovalidationflag
-                      ? AutovalidateMode.disabled
-                      : AutovalidateMode.onUserInteraction,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  // autovalidateMode: _autovalidationflag
+                  //     ? AutovalidateMode.disabled
+                  //     : AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(
                   height: 16,
@@ -219,6 +215,9 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                     return null;
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  // autovalidateMode: _autovalidationflag
+                  //     ? AutovalidateMode.disabled
+                  //     : AutovalidateMode.onUserInteraction,
                 ),
                 const SizedBox(
                   height: 16,
@@ -240,13 +239,12 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => const AddStudentsScreen()));
                       _handleSubmit();
                       // _formKey.currentState!.reset(); // Reset the form
 
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (ctx) => AddStudentsScreen()));
-
-                      _autovalidationflag = true;
+                      // _autovalidationflag = false;
                     }
                   },
                   child: const Text('Submit'),
