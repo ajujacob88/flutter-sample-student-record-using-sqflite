@@ -93,6 +93,7 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
                   }
                   return null;
                 },
+                // autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               Positioned.fill(
                 child: Material(
