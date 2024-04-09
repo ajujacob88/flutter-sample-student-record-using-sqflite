@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Sample Student Record App',
       //  theme: theme,
-      home: HomeScreen(),
+      home: HomeScreen(studentsList: ,),
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => const HomeScreen(),

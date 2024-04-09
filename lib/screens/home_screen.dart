@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sample_student_record_using_sqflite/screens/add_students_screen.dart';
+import 'package:sample_student_record_using_sqflite/screens/view_students_list_screen.dart';
+import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.studentsList});
 
+  final void Function(List<Student>) studentsList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +21,9 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (ctx) => AddStudentsScreen(),
+                  builder: (ctx) => AddStudentsScreen(
+                    passingStudentsListt: studentsList,
+                  ),
                 ),
               );
 
@@ -30,7 +35,15 @@ class HomeScreen extends StatelessWidget {
             width: 26,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ViewStudentsListScreen(
+                    studentsList: studentsList,
+                  ),
+                ),
+              );
+            },
             child: const Text('View Students'),
           )
         ],

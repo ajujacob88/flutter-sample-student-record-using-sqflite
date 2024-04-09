@@ -7,7 +7,9 @@ import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class AddStudentsScreen extends StatefulWidget {
-  const AddStudentsScreen({super.key});
+  const AddStudentsScreen({super.key, required this.passingStudentsListt});
+
+  final void Function(List<Student>) passingStudentsListt;
 
   @override
   State<AddStudentsScreen> createState() => _AddStudentsScreenState();
@@ -49,39 +51,24 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     clearImg = clearImage;
   }
 
-  // void forClearImage2(Function clearimg) {
-  //   print('debug clling this clearIMG');
-  //   clr = clearimg;
-  //   print('clr is $clr');
-  // }
+  List<Student> studentsList = [];
+
+  void addStudent(Student student) {
+    studentsList.add(student);
+  }
 
   void _handleSubmit() {
-    // String name = nameController.text;
-    // String place = placeController.text;
-    // String gender = selectedGender ?? '';
-
-    // Check if any field is empty
-    // if (name.isEmpty ||
-    //     place.isEmpty ||
-    //     gender.isEmpty ||
-    //     _selectedDob.isEmpty) {
-    //   // Show a snackbar to inform the user
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('Please fill in all fields'),
-    //       duration: Duration(seconds: 2), // Optional duration
-    //     ),
-    //   );
-    //   return;
-    // }
-
     Student student = Student(
         name: nameController.text,
         place: placeController.text,
         gender: selectedGender,
         dob: _selectedDob,
         age: _selectedAge,
-        imagePath: _imageBytes);
+        profilePic: _imageBytes);
+
+    addStudent(student);
+
+    widget.passingStudentsListt(studentsList);
 
     // Show a snackbar to inform the user
     ScaffoldMessenger.of(context).showSnackBar(
@@ -113,7 +100,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     clearImg = null;
 
     print(
-        'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, ${student.imagePath}');
+        'Student: $student, name = ${student.name}, dob= ${student.dob}, ${student.gender}, ${student.age}, ${student.profilePic}');
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -239,8 +226,8 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (ctx) => const AddStudentsScreen()));
+                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      //     builder: (ctx) => const AddStudentsScreen(passingStudentsListt: ,)));
                       _handleSubmit();
                       // _formKey.currentState!.reset(); // Reset the form
 
