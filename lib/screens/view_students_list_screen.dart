@@ -14,13 +14,64 @@ class ViewStudentsListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Students List'),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
+        separatorBuilder: (context, index) {
+          return const Divider();
+        },
         itemCount: studentsList.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(studentsList[index].name!),
             subtitle: Text(studentsList[index].place!),
-            leading: Image.memory(studentsList[index].profilePic!),
+            // leading: Image.memory(studentsList[index].profilePic!),
+            // leading: studentsList[index].profilePic != null
+            //     ? Image.memory(studentsList[index].profilePic!)
+            //     : const Icon(Icons
+            //         .account_circle), // Placeholder icon when profile pic is null
+
+            // leading: studentsList[index].profilePic != null
+            //     ? CircleAvatar(
+            //         backgroundImage:
+            //             MemoryImage(studentsList[index].profilePic!),
+            //         radius: 25, // Adjust the radius as needed
+            //       )
+            //     : const CircleAvatar(
+            //         child: const Icon(Icons.account_circle_rounded),
+            //         radius: 25, // Adjust the radius as needed
+            //       ),
+
+            leading: studentsList[index].profilePic != null
+                ? GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: MemoryImage(
+                                      studentsList[index].profilePic!),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: CircleAvatar(
+                        radius: 25,
+                        backgroundImage:
+                            MemoryImage(studentsList[index].profilePic!)),
+                  )
+                : const CircleAvatar(
+                    radius: 25,
+                    child: Icon(Icons.account_circle_rounded),
+                    // Adjust the radius as needed
+                  ),
           );
         },
       ),
