@@ -7,9 +7,9 @@ import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class AddStudentsScreen extends StatefulWidget {
-  const AddStudentsScreen({super.key, required this.passingStudentsListt});
+  const AddStudentsScreen({super.key, required this.studentsList});
 
-  final void Function(List<Student>) passingStudentsListt;
+  final List<Student> studentsList;
 
   @override
   State<AddStudentsScreen> createState() => _AddStudentsScreenState();
@@ -51,10 +51,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     clearImg = clearImage;
   }
 
-  List<Student> studentsList = [];
+  // List<Student> studentsList = [];
 
   void addStudent(Student student) {
-    studentsList.add(student);
+    widget.studentsList.add(student);
   }
 
   void _handleSubmit() {
@@ -67,8 +67,6 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
         profilePic: _imageBytes);
 
     addStudent(student);
-
-    widget.passingStudentsListt(studentsList);
 
     // Show a snackbar to inform the user
     ScaffoldMessenger.of(context).showSnackBar(
@@ -226,8 +224,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      //     builder: (ctx) => const AddStudentsScreen(passingStudentsListt: ,)));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => AddStudentsScreen(
+                                studentsList: widget.studentsList,
+                              )));
                       _handleSubmit();
                       // _formKey.currentState!.reset(); // Reset the form
 

@@ -4,15 +4,11 @@ import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 class ViewStudentsListScreen extends StatelessWidget {
   const ViewStudentsListScreen({super.key, required this.studentsList});
 
-  final void Function(List<Student> studentLists) studentsList;
-
-  // studentsList(List<Student> stlist){
-
-  // }
+  final List<Student> studentsList;
 
   @override
   Widget build(BuildContext context) {
-    print('st list is $studentsList, ');
+    print('st list is $studentsList ');
 
     return Scaffold(
       appBar: AppBar(

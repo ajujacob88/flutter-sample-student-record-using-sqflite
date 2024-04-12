@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sample_student_record_using_sqflite/screens/add_students_screen.dart';
 import 'package:sample_student_record_using_sqflite/screens/home_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Sample Student Record App',
       //  theme: theme,
-      home: HomeScreen(studentsList: ,),
+      home: HomeScreen(),
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => const HomeScreen(),

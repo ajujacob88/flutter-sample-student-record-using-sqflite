@@ -4,11 +4,17 @@ import 'package:sample_student_record_using_sqflite/screens/view_students_list_s
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.studentsList});
+  const HomeScreen({
+    super.key,
+  });
 
-  final void Function(List<Student>) studentsList;
+  //final void Function(List<Student>) studentsList;
+
+  //final List<Student> studentsList;
+
   @override
   Widget build(BuildContext context) {
+    List<Student> studentsList = [];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Record'),
@@ -22,7 +28,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) => AddStudentsScreen(
-                    passingStudentsListt: studentsList,
+                    studentsList: studentsList,
                   ),
                 ),
               );
