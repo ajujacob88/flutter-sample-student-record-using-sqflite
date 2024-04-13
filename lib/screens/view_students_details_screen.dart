@@ -18,10 +18,41 @@ class ViewStudentsDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (studentDetail.profilePic != null)
-              Center(
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: MemoryImage(studentDetail.profilePic!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: MemoryImage(studentDetail.profilePic!),
+                  ),
+                ),
+              )
+            else
+              const Center(
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: MemoryImage(studentDetail.profilePic!),
+                  child: Icon(
+                    Icons.account_circle,
+                    size: 100,
+                  ),
                 ),
               ),
             const SizedBox(height: 20),
