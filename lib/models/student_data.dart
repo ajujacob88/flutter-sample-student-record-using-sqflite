@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 class Student {
-  static int _nextId = 1; // Starting ID value
+  // static int _nextId = 1; // Starting ID value
 
-  int id;
+  int? id;
   String? name;
   String? place;
   String? gender;
@@ -12,14 +12,31 @@ class Student {
   Uint8List? profilePic;
 
   Student({
+    this.id,
     required this.name,
     required this.place,
     required this.gender,
     required this.dob,
     required this.age,
     this.profilePic,
-  }) : id = _nextId++;
+  });
+  // }) //: id = _nextId++;
+
+  // Method to convert a Student instance to a map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'place': place,
+      'gender': gender,
+      'dob': dob,
+      'age': age,
+      'profilePic': profilePic,
+    };
+  }
 }
+
+
 
 
 /*
