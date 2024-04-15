@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 import 'package:sample_student_record_using_sqflite/screens/view_students_details_screen.dart';
+import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 
 class ViewStudentsListScreen extends StatelessWidget {
-  const ViewStudentsListScreen({super.key, required this.studentsList});
+  ViewStudentsListScreen({super.key, required this.studentsList});
 
   final List<Student> studentsList;
+
+  // final DatabaseHelperr _databaseHelper = DatabaseHelperr();
+  // Future<List<Student>> _getStudents() async {
+  //   final students = await _databaseHelper.getAllStudents();
+  //   return students.map((student) => Student.fromMap(student)).toList();
+  // }
+
+  // Future<void> _getStudents() async {
+  //   final students = await _databaseHelper.getAllStudents();
+  //   var studentsList2 =
+  //       students.map((student) => Student.fromMap(student)).toList();
+  // }
 
   @override
   Widget build(BuildContext context) {

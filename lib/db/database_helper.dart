@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class DatabaseHelperr {
@@ -58,11 +57,30 @@ class DatabaseHelperr {
   }
 
   // Read a student into the database
-  Future<List<Map<String, dynamic>>> getAllStudents() async {
-    final dbClient = await db;
-    //return await dbClient!.query('Students');
+  // Future<List<Map<String, dynamic>>> getAllStudents() async {
+  //   final dbClient = await db;
+  //   //return await dbClient!.query('Students');
 
-    //raw query
-    return await dbClient!.rawQuery('SELECT * FROM Students');
+  //   //raw query
+  //   return await dbClient!.rawQuery('SELECT * FROM Students');
+  // }
+
+  Future<List<Student>> getAllStudents() async {
+    final dbClient = await db;
+    //final List<Map<String, dynamic>> maps = await dbClient!.query('students');
+
+    final List<Map<String, dynamic>> maps =
+        await dbClient!.rawQuery('SELECT * FROM Students');
+    return List.generate(maps.length, (i) {
+      return Student(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        place: maps[i]['place'],
+        gender: maps[i]['gender'],
+        dob: maps[i]['dob'],
+        age: maps[i]['age'],
+        profilePic: maps[i]['profilePic'],
+      );
+    });
   }
 }

@@ -34,6 +34,16 @@ class Student {
       'profilePic': profilePic,
     };
   }
+
+  // Additional constructor for creating a Student instance from a map
+  Student.fromMap(Map<String, dynamic> map)
+      : id = map['id'],
+        name = map['name'],
+        place = map['place'],
+        gender = map['gender'],
+        dob = map['dob'],
+        age = map['age'],
+        profilePic = map['profilePic'];
 }
 
 

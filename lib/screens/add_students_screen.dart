@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 //import 'dart:io';
 import 'package:sample_student_record_using_sqflite/widgets/custom_date_and_age_picker.dart';
 import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
@@ -16,6 +17,8 @@ class AddStudentsScreen extends StatefulWidget {
 }
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
+  final DatabaseHelperr _databaseHelper = DatabaseHelperr();
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   String? selectedGender;
@@ -53,8 +56,13 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
 
   // List<Student> studentsList = [];
 
-  void addStudent(Student student) {
-    widget.studentsList.add(student);
+  // void addStudent(Student student) {
+  //   widget.studentsList.add(student);
+
+  // }
+
+  Future<void> addStudent(Student student) async {
+    await _databaseHelper.insertStudent(student.toMap());
   }
 
   void _handleSubmit() {
