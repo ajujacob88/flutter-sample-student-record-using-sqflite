@@ -3,6 +3,106 @@ import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 import 'package:sample_student_record_using_sqflite/screens/view_students_details_screen.dart';
 import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 
+class ViewStudentsListScreen extends StatefulWidget {
+  const ViewStudentsListScreen({super.key});
+
+  @override
+  State<ViewStudentsListScreen> createState() => _ViewStudentsListScreenState();
+}
+
+class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
+  //final List<Student> studentsList;
+
+  final DatabaseHelperr databaseHelper = DatabaseHelperr();
+  late List<Student> studentsList = [];
+
+  Future<void> fetchStudents() async {
+    final students = await databaseHelper.getAllStudents();
+    setState(() {
+      studentsList = students;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudents();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //print('st list is $studentsList ');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Students List'),
+      ),
+      body: studentsList.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.separated(
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+              itemCount: studentsList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                    title: Text(studentsList[index].name!),
+                    subtitle: Text(studentsList[index].place!),
+                    leading: studentsList[index].profilePic != null
+                        ? GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: MemoryImage(
+                                              studentsList[index].profilePic!),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: CircleAvatar(
+                                radius: 25,
+                                backgroundImage: MemoryImage(
+                                    studentsList[index].profilePic!)),
+                          )
+                        : const CircleAvatar(
+                            radius: 25,
+                            child: Icon(Icons.account_circle_rounded),
+                            // Adjust the radius as needed
+                          ),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: ((context) => ViewStudentsDetailsScreen(
+                                studentDetail: studentsList[index],
+                              )),
+                        ),
+                      );
+                    });
+              },
+            ),
+    );
+  }
+}
+
+/*
+import 'package:flutter/material.dart';
+import 'package:sample_student_record_using_sqflite/models/student_data.dart';
+import 'package:sample_student_record_using_sqflite/screens/view_students_details_screen.dart';
+import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
+
 class ViewStudentsListScreen extends StatelessWidget {
   ViewStudentsListScreen({super.key, required this.studentsList});
 
@@ -100,3 +200,4 @@ class ViewStudentsListScreen extends StatelessWidget {
     );
   }
 }
+*/

@@ -8,9 +8,11 @@ import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
 class AddStudentsScreen extends StatefulWidget {
-  const AddStudentsScreen({super.key, required this.studentsList});
+  const AddStudentsScreen({
+    super.key,
+  });
 
-  final List<Student> studentsList;
+  // final List<Student> studentsList;
 
   @override
   State<AddStudentsScreen> createState() => _AddStudentsScreenState();
@@ -232,10 +234,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (ctx) => AddStudentsScreen(
-                                studentsList: widget.studentsList,
-                              )));
+                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      //     builder: (ctx) => AddStudentsScreen(
+                      //           studentsList: widget.studentsList,
+                      //         )));
                       _handleSubmit();
                       // _formKey.currentState!.reset(); // Reset the form
 
