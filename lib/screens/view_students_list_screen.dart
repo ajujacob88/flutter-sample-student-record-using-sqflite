@@ -12,15 +12,32 @@ class ViewStudentsListScreen extends StatefulWidget {
 
 class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
   //final List<Student> studentsList;
+  bool _isLoading = false; // New state variable
 
   final DatabaseHelperr databaseHelper = DatabaseHelperr();
   late List<Student> studentsList = [];
 
   Future<void> fetchStudents() async {
-    final students = await databaseHelper.getAllStudents();
-    setState(() {
-      studentsList = students;
-    });
+    try {
+      setState(() {
+        _isLoading = true; // Set loading state to true
+      });
+      final students = await databaseHelper.getAllStudents();
+      setState(() {
+        studentsList = students;
+        _isLoading = false; // Set loading state to false after fetching
+      });
+    } catch (error) {
+      print('Error fetching students: $error');
+      // Display an error message to the user (e.g., using a SnackBar)
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while fetching students.'),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -36,63 +53,79 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Students List'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Implement your search functionality here
+            },
+          )
+        ],
       ),
-      body: studentsList.isEmpty
+      body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.separated(
-              separatorBuilder: (context, index) {
-                return const Divider();
-              },
-              itemCount: studentsList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                    title: Text(studentsList[index].name!),
-                    subtitle: Text(studentsList[index].place!),
-                    leading: studentsList[index].profilePic != null
-                        ? GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Dialog(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: MemoryImage(
-                                              studentsList[index].profilePic!),
-                                          fit: BoxFit.cover,
+              child:
+                  CircularProgressIndicator()) // Show progress indicator while loading
+          : studentsList.isEmpty
+              ? const Center(
+                  child: Text(
+                      'List is empty')) // Show "List is empty" if no students found
+
+              : ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                  itemCount: studentsList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                        title: Text(studentsList[index].name!),
+                        subtitle: Text(studentsList[index].place!),
+                        leading: studentsList[index].profilePic != null
+                            ? GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: MemoryImage(
+                                                  studentsList[index]
+                                                      .profilePic!),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: CircleAvatar(
+                                child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: MemoryImage(
+                                        studentsList[index].profilePic!)),
+                              )
+                            : const CircleAvatar(
                                 radius: 25,
-                                backgroundImage: MemoryImage(
-                                    studentsList[index].profilePic!)),
-                          )
-                        : const CircleAvatar(
-                            radius: 25,
-                            child: Icon(Icons.account_circle_rounded),
-                            // Adjust the radius as needed
-                          ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => ViewStudentsDetailsScreen(
-                                studentDetail: studentsList[index],
-                              )),
-                        ),
-                      );
-                    });
-              },
-            ),
+                                child: Icon(Icons.account_circle_rounded),
+                                // Adjust the radius as needed
+                              ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: ((context) => ViewStudentsDetailsScreen(
+                                    studentDetail: studentsList[index],
+                                  )),
+                            ),
+                          );
+                        });
+                  },
+                ),
     );
   }
 }
