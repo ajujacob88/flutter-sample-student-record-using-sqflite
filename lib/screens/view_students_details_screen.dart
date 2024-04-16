@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
+import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
 
 class ViewStudentsDetailsScreen extends StatelessWidget {
   const ViewStudentsDetailsScreen({super.key, required this.studentDetail});
@@ -20,23 +21,7 @@ class ViewStudentsDetailsScreen extends StatelessWidget {
             if (studentDetail.profilePic != null)
               GestureDetector(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: MemoryImage(studentDetail.profilePic!),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  showProfilePictureDialog(context, studentDetail.profilePic!);
                 },
                 child: Center(
                   child: CircleAvatar(

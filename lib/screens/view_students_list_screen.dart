@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 import 'package:sample_student_record_using_sqflite/screens/view_students_details_screen.dart';
 import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
+import 'package:sample_student_record_using_sqflite/search_delegates/student_search_delegate.dart';
+import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
 
 class ViewStudentsListScreen extends StatefulWidget {
   const ViewStudentsListScreen({super.key});
@@ -57,11 +59,11 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
         title: const Text('Students List'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: MyCustomSearchDelegate(studentsList),
+                delegate: StudentSearchDelegate(studentsList),
               );
             },
           )
@@ -88,27 +90,8 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                         leading: studentsList[index].profilePic != null
                             ? GestureDetector(
                                 onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Dialog(
-                                        child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: MemoryImage(
-                                                  studentsList[index]
-                                                      .profilePic!),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
+                                  showProfilePictureDialog(
+                                      context, studentsList[index].profilePic!);
                                 },
                                 child: CircleAvatar(
                                     radius: 25,
@@ -131,172 +114,6 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                         });
                   },
                 ),
-    );
-  }
-}
-
-class MyCustomSearchDelegate extends SearchDelegate<List<Student>> {
-  MyCustomSearchDelegate(this.studentsList);
-
-  final List<Student> studentsList;
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = ''; // Clear search text
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, studentsList); // Return to main list on back press
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // Implement logic to filter studentsList based on _searchText
-    final filteredStudents = studentsList
-        .where((student) =>
-            student.name!.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-
-    if (filteredStudents.isEmpty) {
-      return Center(
-        child: Text('No students found for "$query"'),
-      );
-    }
-
-    return ListView.separated(
-      separatorBuilder: (context, index) {
-        return const Divider();
-      },
-      itemCount: filteredStudents.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-            title: Text(filteredStudents[index].name!),
-            subtitle: Text(filteredStudents[index].place!),
-            leading: filteredStudents[index].profilePic != null
-                ? GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: MemoryImage(
-                                      filteredStudents[index].profilePic!),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: CircleAvatar(
-                        radius: 25,
-                        backgroundImage:
-                            MemoryImage(filteredStudents[index].profilePic!)),
-                  )
-                : const CircleAvatar(
-                    radius: 25,
-                    child: Icon(Icons.account_circle_rounded),
-                    // Adjust the radius as needed
-                  ),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: ((context) => ViewStudentsDetailsScreen(
-                        studentDetail: filteredStudents[index],
-                      )),
-                ),
-              );
-            });
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // // Implement logic to display suggestions based on search text (optional)
-    // return const Center(
-    //   child: Text('Search suggestions'),
-    // );
-
-    final suggestedStudents = query.isEmpty
-        ? studentsList
-        : studentsList
-            .where((student) =>
-                student.name!.toLowerCase().startsWith(query.toLowerCase()))
-            .toList();
-
-    return ListView.separated(
-      separatorBuilder: (context, index) {
-        return const Divider();
-      },
-      itemCount: suggestedStudents.length,
-      itemBuilder: (context, index) {
-        // final student = suggestedStudents[index];
-        return ListTile(
-          title: Text(suggestedStudents[index].name!),
-          subtitle: Text(suggestedStudents[index].place!),
-          leading: suggestedStudents[index].profilePic != null
-              ? GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: MemoryImage(
-                                    suggestedStudents[index].profilePic!),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: CircleAvatar(
-                      radius: 25,
-                      backgroundImage:
-                          MemoryImage(suggestedStudents[index].profilePic!)),
-                )
-              : const CircleAvatar(
-                  radius: 25,
-                  child: Icon(Icons.account_circle_rounded),
-                  // Adjust the radius as needed
-                ),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: ((context) => ViewStudentsDetailsScreen(
-                      studentDetail: suggestedStudents[index],
-                    )),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }
