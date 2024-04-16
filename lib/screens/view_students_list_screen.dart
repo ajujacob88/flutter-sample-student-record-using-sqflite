@@ -11,6 +11,8 @@ class ViewStudentsListScreen extends StatefulWidget {
 }
 
 class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
+  String _searchText = ''; // New state variable for search text
+
   //final List<Student> studentsList;
   bool _isLoading = false; // New state variable
 
@@ -57,7 +59,10 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              // Implement your search functionality here
+              showSearch(
+                context: context,
+                delegate: MyCustomSearchDelegate(studentsList),
+              );
             },
           )
         ],
@@ -129,6 +134,110 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     );
   }
 }
+
+class MyCustomSearchDelegate extends SearchDelegate<List<Student>> {
+  MyCustomSearchDelegate(this.studentsList);
+
+  final List<Student> studentsList;
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = ''; // Clear search text
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, studentsList); // Return to main list on back press
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Implement logic to filter studentsList based on _searchText
+    final filteredStudents = studentsList
+        .where((student) =>
+            student.name!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.separated(
+      separatorBuilder: (context, index) {
+        return const Divider();
+      },
+      itemCount: filteredStudents.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+            title: Text(filteredStudents[index].name!),
+            subtitle: Text(filteredStudents[index].place!),
+            leading: filteredStudents[index].profilePic != null
+                ? GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: MemoryImage(
+                                      filteredStudents[index].profilePic!),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: CircleAvatar(
+                        radius: 25,
+                        backgroundImage:
+                            MemoryImage(filteredStudents[index].profilePic!)),
+                  )
+                : const CircleAvatar(
+                    radius: 25,
+                    child: Icon(Icons.account_circle_rounded),
+                    // Adjust the radius as needed
+                  ),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: ((context) => ViewStudentsDetailsScreen(
+                        studentDetail: filteredStudents[index],
+                      )),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Implement logic to display suggestions based on search text (optional)
+    return const Center(
+      child: Text('Search suggestions'),
+    );
+  }
+}
+
+
+
+
+
+
 
 /*
 import 'package:flutter/material.dart';
