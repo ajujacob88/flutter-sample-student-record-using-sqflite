@@ -11,7 +11,7 @@ class ViewStudentsListScreen extends StatefulWidget {
 }
 
 class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
-  String _searchText = ''; // New state variable for search text
+  // String _searchText = ''; // New state variable for search text
 
   //final List<Student> studentsList;
   bool _isLoading = false; // New state variable
@@ -30,7 +30,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
         _isLoading = false; // Set loading state to false after fetching
       });
     } catch (error) {
-      print('Error fetching students: $error');
+      // print('Error fetching students: $error');
       // Display an error message to the user (e.g., using a SnackBar)
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -238,7 +238,7 @@ class MyCustomSearchDelegate extends SearchDelegate<List<Student>> {
     // );
 
     final suggestedStudents = query.isEmpty
-        ? []
+        ? studentsList
         : studentsList
             .where((student) =>
                 student.name!.toLowerCase().startsWith(query.toLowerCase()))
