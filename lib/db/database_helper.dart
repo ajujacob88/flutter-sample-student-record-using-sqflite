@@ -80,15 +80,15 @@ class DatabaseHelperr {
     // return await dbClient!.delete('students', where: 'id = ?', whereArgs: [id],);
 
     //using raw query
-    return await dbClient!.rawDelete('DELETE FROM students WHERE id = ?', [id]);
+    //return await dbClient!.rawDelete('DELETE FROM students WHERE id = ?', [id]);
     //done error handling
 
-    // try {
-    //   return await dbClient!
-    //       .rawDelete('DELETE FROM students WHERE id = ?', [id]);
-    // } catch (error) {
-    //   print('Error deleting student: $error');
-    //   return 0; // Indicate no rows deleted on error
-    // }
+    try {
+      return await dbClient!
+          .rawDelete('DELETE FROM students WHERE id = ?', [id]);
+    } catch (error) {
+      print('Error deleting student: $error');
+      return 0; // Indicate no rows deleted on error
+    }
   }
 }

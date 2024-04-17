@@ -91,7 +91,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
           // Dismiss bottom sheet on undo
           // Navigator.pop(context);
           // Delete from database after 10 seconds
-          _performActualDelete(student.id!);
+          //  _performActualDelete(student.id!);
         });
       });
       if (mounted) {
@@ -130,25 +130,25 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     // database operation here
     final deletedCount = await databaseHelper.deleteStudent(studentId);
 
-    // try {
-    //   if (deletedCount == 0 && mounted) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(
-    //         content: Text('Student not found.'),
-    //       ),
-    //     );
-    //   }
-    // } catch (error) {
-    //   // Handle database errors or other unforeseen exceptions
-    //   if (mounted) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(
-    //         content: Text('An error occurred while deleting the student.'),
-    //       ),
-    //     );
-    //   }
-    //   // print('Error deleting student: $error'); // Log for debugging
-    // }
+    try {
+      if (deletedCount == 0 && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Student not found.'),
+          ),
+        );
+      }
+    } catch (error) {
+      // Handle database errors or other unforeseen exceptions
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while deleting the student.'),
+          ),
+        );
+      }
+      // print('Error deleting student: $error'); // Log for debugging
+    }
   }
 
   @override
