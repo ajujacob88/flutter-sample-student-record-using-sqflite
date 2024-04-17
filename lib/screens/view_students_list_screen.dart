@@ -5,6 +5,7 @@ import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 import 'package:sample_student_record_using_sqflite/search_delegates/student_search_delegate.dart';
 import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
 import 'dart:async';
+import 'package:sample_student_record_using_sqflite/widgets/student_delete_undo_sheet.dart';
 
 class ViewStudentsListScreen extends StatefulWidget {
   const ViewStudentsListScreen({super.key});
@@ -14,9 +15,6 @@ class ViewStudentsListScreen extends StatefulWidget {
 }
 
 class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
-  // String _searchText = ''; // New state variable for search text
-
-  //final List<Student> studentsList;
   bool _isLoading = false; // New state variable
 
   final DatabaseHelperr databaseHelper = DatabaseHelperr();
@@ -229,48 +227,6 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                     );
                   },
                 ),
-    );
-  }
-}
-
-class StudentDeleteUndoSheet extends StatelessWidget {
-  final Student student;
-  final Function onUndoDelete;
-
-  const StudentDeleteUndoSheet({
-    super.key,
-    required this.student,
-    required this.onUndoDelete,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100, // Adjust height as needed
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Student "${student.name}" deleted.'),
-            TextButton(
-              onPressed: () {
-                onUndoDelete();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Student "${student.name}" restored.'),
-                  ),
-                );
-              }, //onUndoDelete,
-              child: Text(
-                'Undo',
-                style: TextStyle(color: Theme.of(context).primaryColor),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
