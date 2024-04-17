@@ -4,6 +4,7 @@ import 'package:sample_student_record_using_sqflite/screens/view_students_detail
 import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 import 'package:sample_student_record_using_sqflite/search_delegates/student_search_delegate.dart';
 import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
+import 'dart:async';
 
 class ViewStudentsListScreen extends StatefulWidget {
   const ViewStudentsListScreen({super.key});
@@ -50,7 +51,12 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     fetchStudents();
   }
 
-  void _handleDeleteStudent(Student student, DismissDirection direction) async {
+  Future<void> _handleDeleteStudent(
+      Student student, DismissDirection direction) async {
+    Student? deletedStudent; // To store deleted student for undo
+    bool isStudentDeleted = false;
+    Timer? undoTimer;
+
     if (direction == DismissDirection.endToStart) {
       // User swiped left
       // 1. Show confirmation dialog (optional)
@@ -77,32 +83,70 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
       } // User cancelled deletion
 
       // 2. Call your data access layer to delete the student
-      final deletedCount = await databaseHelper.deleteStudent(student.id!);
-      try {
-        if (deletedCount == 0 && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Student not found.'),
-            ),
-          );
-        } else {
-          // Update the studentsList state if the student is removed
-          setState(() {
-            studentsList.remove(student);
-          });
-        }
-      } catch (error) {
-        // Handle database errors or other unforeseen exceptions
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('An error occurred while deleting the student.'),
-            ),
-          );
-        }
-        print('Error deleting student: $error'); // Log for debugging
-      }
+      // final deletedCount = await databaseHelper.deleteStudent(student.id!);
+      // try {
+      //   if (deletedCount == 0 && mounted) {
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(
+      //         content: Text('Student not found.'),
+      //       ),
+      //     );
+      //   } else {
+      //     // Update the studentsList state if the student is removed
+      //     // Student deleted successfully, show bottom sheet
+      deletedStudent = student; // Store deleted student for undo
+      setState(() {
+        // Remove from list immediately
+        studentsList.removeWhere((s) => s.id == student.id);
+        // studentsList.remove(student);
+        isStudentDeleted = true;
+        undoTimer = Timer(const Duration(seconds: 7), () {
+          // Dismiss bottom sheet on undo
+          Navigator.pop(context);
+          // Delete from database after 10 seconds
+          _performActualDelete(student.id!);
+        });
+      });
+      showModalBottomSheet(
+          context: context,
+          builder: (context) => StudentDeleteUndoSheet(
+                student: student,
+                onUndoDelete: () {
+                  // Handle undo logic (cancel timer and add student back to list)
+                  undoTimer?.cancel();
+                  // Dismiss bottom sheet on undo
+                  Navigator.pop(context);
+
+                  setState(() {
+                    isStudentDeleted = false;
+                    // Add student back to list
+                    studentsList.add(deletedStudent!);
+                    //  studentsList.insert(studentsList.indexOf(student), student);
+                    deletedStudent = null;
+                  });
+                },
+              )).then((_) {
+        _performActualDelete(student.id!.toInt());
+      });
+      // }
+      //   } catch (error) {
+      // Handle database errors or other unforeseen exceptions
+      // if (mounted) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('An error occurred while deleting the student.'),
+      //     ),
+      //   );
+      // }
+      //   print('Error deleting student: $error'); // Log for debugging
+      //   }
     }
+  }
+
+  void _performActualDelete(int studentId) async {
+    // Call your actual database logic for permanent deletion (optional)
+    // ... your database operation here
+    await databaseHelper.deleteStudent(studentId);
   }
 
   @override
@@ -183,3 +227,103 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     );
   }
 }
+
+class StudentDeleteUndoSheet extends StatelessWidget {
+  final Student student;
+  final Function onUndoDelete;
+
+  const StudentDeleteUndoSheet({
+    super.key,
+    required this.student,
+    required this.onUndoDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100, // Adjust height as needed
+      //  color: Colors.white,
+      color: Colors.red,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Student "${student.name}" deleted.'),
+            TextButton(
+              onPressed: () {
+                onUndoDelete();
+              }, //onUndoDelete,
+              child: Text(
+                'Undo',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+/*
+
+  void _handleDeleteStudent(Student student, DismissDirection direction) async {
+    if (direction == DismissDirection.endToStart) {
+      // User swiped left
+      // 1. Show confirmation dialog (optional)
+      final confirmed = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete ${student.name}'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Delete'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) {
+        setState(() {});
+        return;
+      } // User cancelled deletion
+
+      // 2. Call your data access layer to delete the student
+      final deletedCount = await databaseHelper.deleteStudent(student.id!);
+      try {
+        if (deletedCount == 0 && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Student not found.'),
+            ),
+          );
+        } else {
+          // Update the studentsList state if the student is removed
+          setState(() {
+            studentsList.remove(student);
+          });
+        }
+      } catch (error) {
+        // Handle database errors or other unforeseen exceptions
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An error occurred while deleting the student.'),
+            ),
+          );
+        }
+        print('Error deleting student: $error'); // Log for debugging
+      }
+    }
+  }
+*/
