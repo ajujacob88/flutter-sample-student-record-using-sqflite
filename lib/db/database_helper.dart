@@ -56,15 +56,6 @@ class DatabaseHelperr {
     );
   }
 
-  // Read a student into the database
-  // Future<List<Map<String, dynamic>>> getAllStudents() async {
-  //   final dbClient = await db;
-  //   //return await dbClient!.query('Students');
-
-  //   //raw query
-  //   return await dbClient!.rawQuery('SELECT * FROM Students');
-  // }
-
   Future<List<Student>> getAllStudents() async {
     final dbClient = await db;
     //final List<Map<String, dynamic>> maps = await dbClient!.query('students');
@@ -82,5 +73,22 @@ class DatabaseHelperr {
         profilePic: maps[i]['profilePic'],
       );
     });
+  }
+
+  Future<int> deleteStudent(int id) async {
+    final dbClient = await db;
+    // return await dbClient!.delete('students', where: 'id = ?', whereArgs: [id],);
+
+    //using raw query
+    //return await dbClient!.rawDelete('DELETE FROM students WHERE id = ?', [id]);
+    //done error handling
+
+    try {
+      return await dbClient!
+          .rawDelete('DELETE FROM students WHERE id = ?', [id]);
+    } catch (error) {
+      print('Error deleting student: $error');
+      return 0; // Indicate no rows deleted on error
+    }
   }
 }

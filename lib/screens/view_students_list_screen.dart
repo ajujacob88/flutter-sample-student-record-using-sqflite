@@ -50,6 +50,61 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     fetchStudents();
   }
 
+  void _handleDeleteStudent(Student student, DismissDirection direction) async {
+    if (direction == DismissDirection.endToStart) {
+      // User swiped left
+      // 1. Show confirmation dialog (optional)
+      final confirmed = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete ${student.name}'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Delete'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) {
+        setState(() {});
+        return;
+      } // User cancelled deletion
+
+      // 2. Call your data access layer to delete the student
+      final deletedCount = await databaseHelper.deleteStudent(student.id!);
+      try {
+        if (deletedCount == 0 && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Student not found.'),
+            ),
+          );
+        } else {
+          // Update the studentsList state if the student is removed
+          setState(() {
+            studentsList.remove(student);
+          });
+        }
+      } catch (error) {
+        // Handle database errors or other unforeseen exceptions
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An error occurred while deleting the student.'),
+            ),
+          );
+        }
+        print('Error deleting student: $error'); // Log for debugging
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //print('st list is $studentsList ');
@@ -84,34 +139,45 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                   },
                   itemCount: studentsList.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                        title: Text(studentsList[index].name!),
-                        subtitle: Text(studentsList[index].place!),
-                        leading: studentsList[index].profilePic != null
-                            ? GestureDetector(
-                                onTap: () {
-                                  showProfilePictureDialog(
-                                      context, studentsList[index].profilePic!);
-                                },
-                                child: CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: MemoryImage(
-                                        studentsList[index].profilePic!)),
-                              )
-                            : const CircleAvatar(
-                                radius: 25,
-                                child: Icon(Icons.account_circle_rounded),
-                                // Adjust the radius as needed
+                    return Dismissible(
+                      key: UniqueKey(), // Unique key for each student item
+                      background: Container(
+                        color: Colors.red,
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) =>
+                          _handleDeleteStudent(studentsList[index], direction),
+                      child: ListTile(
+                          title: Text(studentsList[index].name!),
+                          subtitle: Text(studentsList[index].place!),
+                          leading: studentsList[index].profilePic != null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    showProfilePictureDialog(context,
+                                        studentsList[index].profilePic!);
+                                  },
+                                  child: CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage: MemoryImage(
+                                          studentsList[index].profilePic!)),
+                                )
+                              : const CircleAvatar(
+                                  radius: 25,
+                                  child: Icon(Icons.account_circle_rounded),
+                                  // Adjust the radius as needed
+                                ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: ((context) =>
+                                    ViewStudentsDetailsScreen(
+                                      studentDetail: studentsList[index],
+                                    )),
                               ),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: ((context) => ViewStudentsDetailsScreen(
-                                    studentDetail: studentsList[index],
-                                  )),
-                            ),
-                          );
-                        });
+                            );
+                          }),
+                    );
                   },
                 ),
     );
