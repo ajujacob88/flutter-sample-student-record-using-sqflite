@@ -89,7 +89,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
         isStudentDeleted = true;
         undoTimer = Timer(const Duration(seconds: 7), () {
           // Dismiss bottom sheet on undo
-          Navigator.pop(context);
+          // Navigator.pop(context);
           // Delete from database after 10 seconds
           _performActualDelete(student.id!);
         });
@@ -103,7 +103,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
               // Handle undo logic (cancel timer and add student back to list)
               undoTimer?.cancel();
               // Dismiss bottom sheet on undo
-              // Navigator.pop(context, true);
+              Navigator.pop(context, true);
 
               setState(() {
                 isStudentDeleted = false;
