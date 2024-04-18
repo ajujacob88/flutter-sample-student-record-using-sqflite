@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class CustomDateAndAgePicker extends StatefulWidget {
-  const CustomDateAndAgePicker(
-      {super.key, required this.onDateSelected, required this.onClear});
+  const CustomDateAndAgePicker({
+    super.key,
+    required this.onDateSelected,
+    required this.onClear,
+    this.initialDateSaved,
+    this.initialAgeSaved,
+  });
 
   final Function(String dob, int age) onDateSelected;
 
@@ -12,6 +16,9 @@ class CustomDateAndAgePicker extends StatefulWidget {
     TextEditingController dobControl,
     TextEditingController ageControl,
   ) onClear;
+
+  final String? initialDateSaved; //  parameter for pre-selected date
+  final int? initialAgeSaved; //  parameter for pre-selected age
 
   @override
   State<CustomDateAndAgePicker> createState() => _CustomDateAndAgePickerState();
@@ -31,6 +38,8 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
   }
 
   void _selectDate(BuildContext context) async {
+    print(
+        'debug check 111 current dat is ${widget.initialDateSaved}, age is ${widget.initialAgeSaved}');
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -79,6 +88,7 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
             children: [
               TextFormField(
                 readOnly: true,
+                //    initialValue: widget.initialDate2,
                 controller: dobController,
                 decoration: InputDecoration(
                   labelText: 'Date of Birth',
@@ -116,6 +126,7 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
           child: TextFormField(
             readOnly: true,
             enabled: false,
+            initialValue: widget.initialAgeSaved.toString(),
             controller: ageController,
             decoration: const InputDecoration(
               labelText: 'Age',

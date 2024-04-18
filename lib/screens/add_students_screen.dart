@@ -151,7 +151,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Students')),
+      appBar: AppBar(title: Text(_isEdit ? 'Edit Student' : 'Add Students')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 60, right: 60, top: 10),
@@ -207,6 +207,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ),
                 DropdownButtonFormField(
                   key: newKeyForDropDownButton,
+                  value: _isEdit ? widget.initialStudent!.gender : null,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -253,6 +254,12 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 CustomDateAndAgePicker(
                   onDateSelected: handleDateSelected,
                   onClear: handleDobControllers,
+                  initialDateSaved: _isEdit
+                      ? _selectedDob
+                      : null, // Pass date only in edit mode
+                  initialAgeSaved: _isEdit
+                      ? _selectedAge
+                      : null, // Pass age only in edit mode
                 ),
                 const SizedBox(
                   height: 26,
