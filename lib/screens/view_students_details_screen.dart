@@ -3,6 +3,7 @@ import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
 import 'package:intl/intl.dart';
 import 'package:sample_student_record_using_sqflite/services/student_service.dart';
+import 'package:sample_student_record_using_sqflite/screens/add_students_screen.dart';
 
 class ViewStudentsDetailsScreen extends StatefulWidget {
   const ViewStudentsDetailsScreen({super.key, required this.studentDetail});
@@ -153,23 +154,48 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
             Text('Gender: ${widget.studentDetail.gender ?? 'N/A'}'),
             Text('Date of Birth: ${widget.studentDetail.dob ?? 'N/A'}'),
             Text('Age: ${widget.studentDetail.age ?? 'N/A'}'),
+            Text('id is: ${widget.studentDetail.id ?? 'N/A'}'),
             const SizedBox(height: 20),
             // Add a button to enable/disable edit form
+            // ElevatedButton(
+            //   onPressed: () => setState(() => _isEditEnabled = !_isEditEnabled),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       _isEditEnabled
+            //           ? const Icon(Icons.edit_off)
+            //           : const Icon(Icons.edit),
+            //       const SizedBox(width: 5),
+            //       Text(_isEditEnabled ? 'Disable Editing' : 'Enable Editing'),
+            //     ],
+            //   ),
+            // ),
+            // // Conditionally display the edit form
+            // if (_isEditEnabled) _buildEditForm(),
+
             ElevatedButton(
-              onPressed: () => setState(() => _isEditEnabled = !_isEditEnabled),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _isEditEnabled
-                      ? const Icon(Icons.edit_off)
-                      : const Icon(Icons.edit),
-                  const SizedBox(width: 5),
-                  Text(_isEditEnabled ? 'Disable Editing' : 'Enable Editing'),
-                ],
-              ),
+              onPressed: () async {
+                // Navigate to AddStudentScreen with student details for editing
+                final updatedStudent = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddStudentsScreen(
+                      initialStudent: widget.studentDetail,
+                      isEditt: true, // Flag for editing mode
+                    ),
+                  ),
+                );
+                if (updatedStudent != null) {
+                  // Update successful (handle the updated student data)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Student updated successfully')),
+                  );
+                  // Update UI with changes if needed (optional)
+                }
+              },
+              child: const Text('Edit Details'),
             ),
-            // Conditionally display the edit form
-            if (_isEditEnabled) _buildEditForm(),
           ],
         ),
       ),
