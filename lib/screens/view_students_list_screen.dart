@@ -4,6 +4,7 @@ import 'package:sample_student_record_using_sqflite/screens/view_students_detail
 import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 import 'package:sample_student_record_using_sqflite/search_delegates/student_search_delegate.dart';
 import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
+import 'package:sample_student_record_using_sqflite/widgets/confirmation_dialog.dart';
 import 'dart:async';
 import 'package:sample_student_record_using_sqflite/widgets/student_delete_undo_sheet.dart';
 
@@ -57,23 +58,33 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
 
     if (direction == DismissDirection.endToStart) {
       // User swiped left
-      // 1. Show confirmation dialog (optional)
+      //  Show confirmation dialog (optional)
+      //AlertDialog is written as a widget named as confirmationdialog
       final confirmed = await showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete ${student.name}'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete'),
-            ),
-          ],
+        builder: (context) => ConfirmationDialog(
+          title: 'Confirm Delete',
+          content: 'Are you sure you want to delete ${student.name}',
+          onCancel: (context) => Navigator.pop(context, false),
+          onConfirm: (context) => Navigator.pop(context, true),
         ),
+
+        // final confirmed = await showDialog(
+        //   context: context,
+        //   builder: (context) => AlertDialog(
+        //     title: const Text('Confirm Delete'),
+        //     content: Text('Are you sure you want to delete ${student.name}'),
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () => Navigator.pop(context, false),
+        //         child: const Text('Cancel'),
+        //       ),
+        //       TextButton(
+        //         onPressed: () => Navigator.pop(context, true),
+        //         child: const Text('Delete'),
+        //       ),
+        //     ],
+        //   ),
       );
       if (confirmed != true) {
         setState(() {});
@@ -86,12 +97,12 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
         studentsList.removeWhere((s) => s.id == student.id);
         // studentsList.remove(student);
         isStudentDeleted = true;
-        undoTimer = Timer(const Duration(seconds: 7), () {
-          // Dismiss bottom sheet on undo
-          // Navigator.pop(context);
-          // Delete from database after 10 seconds
-          //  _performActualDelete(student.id!);
-        });
+        // undoTimer = Timer(const Duration(seconds: 7), () {
+        //   // Dismiss bottom sheet on undo
+        //   // Navigator.pop(context);
+        //   // Delete from database after 10 seconds
+        //   //  _performActualDelete(student.id!);
+        // },);
       });
       if (mounted) {
         showModalBottomSheet(
@@ -100,7 +111,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
             student: student,
             onUndoDelete: () {
               // Handle undo logic (cancel timer and add student back to list)
-              undoTimer?.cancel();
+              // undoTimer?.cancel();
               // Dismiss bottom sheet on undo
               Navigator.pop(context, true);
 
