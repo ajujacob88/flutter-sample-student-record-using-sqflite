@@ -36,8 +36,31 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
     super.initState();
     // Check for initial values and pre-fill if available
     if (widget.initialDateSaved != null) {
-      selectedDate =
-          DateTime.parse(widget.initialDateSaved!); // Parse initial date string
+      // Parse initial date string
+      // print('debug checkkkk before parsing ${widget.initialDateSaved!}');
+      // selectedDate = DateTime.parse(widget.initialDateSaved!);
+
+      // Specify your expected format
+      final DateFormat format = DateFormat('dd-MM-yyyy');
+      DateTime? parsedDate;
+      try {
+        parsedDate = format.parse(widget.initialDateSaved!);
+      } catch (e) {
+        // Handle parsing exception (optional)
+        print("Error parsing date: $e");
+        selectedDate = DateTime.now();
+      }
+
+      if (parsedDate != null) {
+        selectedDate = parsedDate;
+        // ... rest of your code
+      } else {
+        // Handle cases where parsing fails (optional)
+        print("Error parsing date: ");
+        selectedDate = DateTime.now();
+      }
+
+      //  print('debug checkkkk after pasrsing ${selectedDate}');
       dobController.text = widget.initialDateSaved!;
       calculateAge(selectedDate); // Calculate age based on initial date
     } else {
@@ -59,6 +82,8 @@ class _CustomDateAndAgePickerState extends State<CustomDateAndAgePicker> {
   void _selectDate(BuildContext context) async {
     print(
         'debug check 111 current dat is ${widget.initialDateSaved}, age is ${widget.initialAgeSaved}');
+    // if (context == null) return; // Check if context is valid
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
