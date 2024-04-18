@@ -1,50 +1,12 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 
-class DatabaseHelperr {
-  DatabaseHelperr._privateConstructorr();
-
-  static final DatabaseHelperr _instance =
-      DatabaseHelperr._privateConstructorr();
-
-  factory DatabaseHelperr() => _instance;
-
-  static Database? _db;
-
-  static const String _dbName = 'students.db';
-  //static const String _tableName = 'students';
-
-  Future<Database?> get db async {
-    if (_db != null) {
-      return _db;
-    }
-    _db = await initDb();
-    return _db;
-  }
-
-  Future<Database> initDb() async {
-    final databasePath = await getDatabasesPath();
-    final path = join(databasePath, _dbName);
-
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute(
-            '''CREATE TABLE Students (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,  place TEXT NOT NULL, gender TEXT NOT NULL, dob TEXT NOT NULL, age INTEGER NOT NULL, profilePic BLOB)''');
-      },
-    );
-  }
-
-  //the databse student functions are seperated into new file student services.dart inservice folder, which is the good practise...
-
-  /*
-  
+class StudentService {
+  static final DatabaseHelperr _dbHelper = DatabaseHelperr();
 
 // Insert a student into the database
-  Future<int> insertStudent(Map<String, dynamic> row) async {
-    final dbClient = await db;
+  static Future<int> insertStudent(Map<String, dynamic> row) async {
+    final dbClient = await _dbHelper.db;
     // return await dbClient!.insert('Student', row);
     //rawinsert
 
@@ -61,8 +23,8 @@ class DatabaseHelperr {
     );
   }
 
-  Future<List<Student>> getAllStudents() async {
-    final dbClient = await db;
+  static Future<List<Student>> getAllStudents() async {
+    final dbClient = await _dbHelper.db;
     //final List<Map<String, dynamic>> maps = await dbClient!.query('students');
 
     final List<Map<String, dynamic>> maps =
@@ -80,9 +42,8 @@ class DatabaseHelperr {
     });
   }
 
-
-  Future<int> deleteStudent(int id) async {
-    final dbClient = await db;
+  static Future<int> deleteStudent(int id) async {
+    final dbClient = await _dbHelper.db;
     // return await dbClient!.delete('students', where: 'id = ?', whereArgs: [id],);
 
     //using raw query
@@ -97,6 +58,4 @@ class DatabaseHelperr {
       return 0; // Indicate no rows deleted on error
     }
   }
-
-  */
 }

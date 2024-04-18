@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
 import 'package:sample_student_record_using_sqflite/screens/view_students_details_screen.dart';
-import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
+//import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 import 'package:sample_student_record_using_sqflite/search_delegates/student_search_delegate.dart';
 import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
 import 'package:sample_student_record_using_sqflite/widgets/confirmation_dialog.dart';
 import 'dart:async';
 import 'package:sample_student_record_using_sqflite/widgets/student_delete_undo_sheet.dart';
+
+import 'package:sample_student_record_using_sqflite/services/student_service.dart';
 
 class ViewStudentsListScreen extends StatefulWidget {
   const ViewStudentsListScreen({super.key});
@@ -18,7 +20,9 @@ class ViewStudentsListScreen extends StatefulWidget {
 class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
   bool _isLoading = false; // New state variable
 
-  final DatabaseHelperr databaseHelper = DatabaseHelperr();
+  //since the database functions are defined in student service as static methods, this functions can be assessed directly with classname and dot, not by creating object(because the functions are written as static, means that Static methods are associated with the class itself rather than instances of the class. They can be accessed directly using the class name followed by a dot (.).)
+  // final StudentService stdserv = StudentService();
+// final DatabaseHelperr databaseHelper = DatabaseHelperr();
   late List<Student> studentsList = [];
 
   Future<void> fetchStudents() async {
@@ -26,7 +30,9 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
       setState(() {
         _isLoading = true; // Set loading state to true
       });
-      final students = await databaseHelper.getAllStudents();
+      // final students = await databaseHelper.getAllStudents();
+      //final students = await stdserv.getAllStudents();
+      final students = await StudentService.getAllStudents();
       setState(() {
         studentsList = students;
         _isLoading = false; // Set loading state to false after fetching
@@ -97,12 +103,15 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
         studentsList.removeWhere((s) => s.id == student.id);
         // studentsList.remove(student);
         isStudentDeleted = true;
-        // undoTimer = Timer(const Duration(seconds: 7), () {
-        //   // Dismiss bottom sheet on undo
-        //   // Navigator.pop(context);
-        //   // Delete from database after 10 seconds
-        //   //  _performActualDelete(student.id!);
-        // },);
+        undoTimer = Timer(
+          const Duration(seconds: 7),
+          () {
+            // Dismiss bottom sheet on undo
+            // Navigator.pop(context);
+            // Delete from database after 10 seconds
+            //  _performActualDelete(student.id!);
+          },
+        );
       });
       if (mounted) {
         showModalBottomSheet(
@@ -111,7 +120,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
             student: student,
             onUndoDelete: () {
               // Handle undo logic (cancel timer and add student back to list)
-              // undoTimer?.cancel();
+              undoTimer?.cancel();
               // Dismiss bottom sheet on undo
               Navigator.pop(context, true);
 
@@ -140,8 +149,8 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
 
   void _performActualDelete(int studentId) async {
     // database operation here
-    final deletedCount = await databaseHelper.deleteStudent(studentId);
-
+    // final deletedCount = await databaseHelper.deleteStudent(studentId);
+    final deletedCount = await StudentService.deleteStudent(studentId);
     try {
       if (deletedCount == 0 && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

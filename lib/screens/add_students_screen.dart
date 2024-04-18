@@ -6,6 +6,7 @@ import 'package:sample_student_record_using_sqflite/db/database_helper.dart';
 import 'package:sample_student_record_using_sqflite/widgets/custom_date_and_age_picker.dart';
 import 'package:sample_student_record_using_sqflite/widgets/image_upload.dart';
 import 'package:sample_student_record_using_sqflite/models/student_data.dart';
+import 'package:sample_student_record_using_sqflite/services/student_service.dart';
 
 class AddStudentsScreen extends StatefulWidget {
   const AddStudentsScreen({
@@ -19,7 +20,7 @@ class AddStudentsScreen extends StatefulWidget {
 }
 
 class _AddStudentsScreenState extends State<AddStudentsScreen> {
-  final DatabaseHelperr _databaseHelper = DatabaseHelperr();
+  // final DatabaseHelperr _databaseHelper = DatabaseHelperr(); //the student database insert function is moved to student service and declared it as static, so we can directly access the functions by calling studentservice (dot)methodname, no need to create the object/instance
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
@@ -64,7 +65,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   // }
 
   Future<void> addStudent(Student student) async {
-    await _databaseHelper.insertStudent(student.toMap());
+    await StudentService.insertStudent(student.toMap());
   }
 
   void _handleSubmit() {
