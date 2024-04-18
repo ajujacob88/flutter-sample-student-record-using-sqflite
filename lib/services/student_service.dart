@@ -58,4 +58,23 @@ class StudentService {
       return 0; // Indicate no rows deleted on error
     }
   }
+
+  static Future<int> editStudentDetails(Student student) async {
+    final dbClient = await _dbHelper.db;
+    // return await dbClient!.insert('Student', row);
+    //rawinsert
+
+    return await dbClient!.rawUpdate(
+      'UPDATE Students SET name = ?, place = ?, gender = ?, dob = ?, age = ?, profilePic = ? WHERE id = ?',
+      [
+        student.name,
+        student.place,
+        student.gender,
+        student.dob,
+        student.age,
+        student.profilePic,
+        student.id
+      ],
+    );
+  }
 }
