@@ -31,6 +31,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
   int? _selectedAge;
   Uint8List? _imageBytes;
   Function? clearImg;
+  Uint8List? _initialImageBytes;
 
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
@@ -52,6 +53,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       selectedGender = widget.initialStudent!.gender;
       _selectedDob = widget.initialStudent!.dob ?? '';
       _selectedAge = widget.initialStudent!.age;
+      _initialImageBytes = widget.initialStudent!.profilePic;
     }
   }
 
@@ -267,6 +269,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ImageUpload(
                   //  forClearImage: forClearImage2,
                   onSelectImage: handleImageSelected,
+                  initialImageBytes: _isEdit ? _initialImageBytes : null,
                 ),
                 const SizedBox(
                   height: 26,

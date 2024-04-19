@@ -3,19 +3,19 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload({
-    super.key,
-    required this.onSelectImage,
-  });
+  const ImageUpload(
+      {super.key, required this.onSelectImage, this.initialImageBytes});
 
   // final Function onSelectImage;
 
-  //final Function forClearImage;
+  // final Function forClearImage;
 
   // final void Function(Function) forClearImage;
 
   final void Function(Uint8List?, TextEditingController, Function)
       onSelectImage;
+
+  final Uint8List? initialImageBytes;
 
   @override
   State<ImageUpload> createState() => _ImageUploadState();
@@ -25,6 +25,16 @@ class _ImageUploadState extends State<ImageUpload> {
   final TextEditingController imageController = TextEditingController();
   String? pickedFilePath;
   Uint8List? _imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialImageBytes != null) {
+      setState(() {
+        _imageBytes = widget.initialImageBytes;
+      });
+    }
+  }
 
   clearImage() {
     setState(() {
