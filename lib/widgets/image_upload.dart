@@ -114,41 +114,31 @@ class _ImageUploadState extends State<ImageUpload> {
     return Row(
       children: [
         Expanded(
-          child: TextFormField(
-            readOnly: true,
-            controller: imageController,
-            enabled: false,
-            decoration: InputDecoration(
-              labelText: 'Profile Pic',
-              border: InputBorder.none,
-              suffixIcon: Stack(
-                children: [
-                  _imageBytes != null
-                      ? Image.memory(
-                          _imageBytes!,
-                          width: 130,
-                          height: 130,
-                          fit: BoxFit.fill,
-                        )
-                      : const SizedBox(),
-                  _imageBytes != null
-                      ? Positioned(
-                          right: 0.0,
-                          child: IconButton(
-                            icon: const Icon(Icons.close),
-                            // onPressed: () => setState(() => _imageBytes = null),
-                            onPressed: () {
-                              setState(() {
-                                _imageBytes = null;
-                              });
-                              setState(() {});
-                            },
-                          ),
-                        )
-                      : SizedBox(),
-                ],
-              ),
-            ),
+          child: Stack(
+            children: [
+              _imageBytes != null
+                  ? Image.memory(
+                      _imageBytes!,
+                      width: 130,
+                      height: 130,
+                      fit: BoxFit.fill,
+                    )
+                  : Text('Profile Pic'),
+              _imageBytes != null
+                  ? Positioned(
+                      right: 0.0,
+                      child: IconButton(
+                        icon: const Icon(Icons.close),
+                        // onPressed: () => setState(() => _imageBytes = null),
+                        onPressed: () {
+                          setState(() {
+                            _imageBytes = null;
+                          });
+                        },
+                      ),
+                    )
+                  : SizedBox(),
+            ],
           ),
         ),
         const SizedBox(width: 16),
