@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
+import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
 
 class ImageUpload extends StatefulWidget {
   const ImageUpload(
@@ -121,7 +122,9 @@ class _ImageUploadState extends State<ImageUpload> {
                       // Inner Stack for image and button
                       children: [
                         GestureDetector(
-                          onTap: () {}, // Empty tap handler for image
+                          onTap: () {
+                            showProfilePictureDialog(context, _imageBytes!);
+                          }, // Empty tap handler for image
                           child: Image.memory(
                             _imageBytes!,
                             width: 130,
