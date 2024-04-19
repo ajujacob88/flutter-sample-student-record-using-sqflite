@@ -117,30 +117,76 @@ class _ImageUploadState extends State<ImageUpload> {
           child: Stack(
             children: [
               _imageBytes != null
-                  ? Image.memory(
-                      _imageBytes!,
-                      width: 130,
-                      height: 130,
-                      fit: BoxFit.fill,
+                  ? Stack(
+                      // Inner Stack for image and button
+                      children: [
+                        GestureDetector(
+                          onTap: () {}, // Empty tap handler for image
+                          child: Image.memory(
+                            _imageBytes!,
+                            width: 130,
+                            height: 130,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: GestureDetector(
+                            // Separate GestureDetector for button
+                            onTap: () {
+                              setState(() => _imageBytes = null);
+                            },
+                            child: Container(
+                              // Rectangular box
+                              height: 30.0, // Adjust height as needed
+                              color: Colors.black
+                                  .withOpacity(0.5), // Semi-transparent black
+                              child: const Center(
+                                child: Text(
+                                  'Remove ',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                   : Text('Profile Pic'),
-              _imageBytes != null
-                  ? Positioned(
-                      right: 0.0,
-                      child: IconButton(
-                        icon: const Icon(Icons.close),
-                        // onPressed: () => setState(() => _imageBytes = null),
-                        onPressed: () {
-                          setState(() {
-                            _imageBytes = null;
-                          });
-                        },
-                      ),
-                    )
-                  : SizedBox(),
             ],
           ),
         ),
+
+        // Expanded(
+        //   child: Stack(
+        //     children: [
+        //       _imageBytes != null
+        //           ? Image.memory(
+        //               _imageBytes!,
+        //               width: 130,
+        //               height: 130,
+        //               fit: BoxFit.fill,
+        //             )
+        //           : Text('Profile Pic'),
+        //       _imageBytes != null
+        //           ? Positioned(
+        //               right: 0.0,
+        //               child: IconButton(
+        //                 icon: const Icon(Icons.close),
+        //                 // onPressed: () => setState(() => _imageBytes = null),
+        //                 onPressed: () {
+        //                   setState(() {
+        //                     _imageBytes = null;
+        //                   });
+        //                 },
+        //               ),
+        //             )
+        //           : SizedBox(),
+        //     ],
+        //   ),
+        // ),
         const SizedBox(width: 16),
         Expanded(
           child: OutlinedButton(
