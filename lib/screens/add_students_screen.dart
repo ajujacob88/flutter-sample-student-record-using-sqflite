@@ -281,13 +281,19 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                       //     builder: (ctx) => AddStudentsScreen(
                       //           studentsList: widget.studentsList,
                       //         )));
+
+                      _isEdit
+                          ? Navigator.of(context).pop()
+                          : Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (ctx) => AddStudentsScreen()));
                       _handleSubmit();
                       // _formKey.currentState!.reset(); // Reset the form
 
                       // _autovalidationflag = false;
                     }
                   },
-                  child: const Text('Submit'),
+                  child: Text(_isEdit ? 'Update' : 'Submit'),
                 ),
               ],
             ),

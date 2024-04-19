@@ -16,102 +16,102 @@ class ViewStudentsDetailsScreen extends StatefulWidget {
 }
 
 class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
-  final _formKey = GlobalKey<FormState>(); // Form key for validation
-  late Student _editedStudent = widget.studentDetail; // Copy of student data
-  bool _isEditEnabled = false; // Flag to enable/disable edit form
+//  final _formKey = GlobalKey<FormState>(); // Form key for validation
+//  late Student _editedStudent = widget.studentDetail; // Copy of student data
+//  bool _isEditEnabled = false; // Flag to enable/disable edit form
 
-  Widget _buildEditForm() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            initialValue: _editedStudent.name,
-            decoration: const InputDecoration(labelText: 'Name'),
-            validator: (value) => value!.isEmpty ? 'Please enter a name' : null,
-            onSaved: (value) => _editedStudent.name = value,
-          ),
-          TextFormField(
-            initialValue: _editedStudent.place,
-            decoration: const InputDecoration(labelText: 'Place'),
-            validator: (value) =>
-                value!.isEmpty ? 'Please enter a place' : null,
-            onSaved: (value) => _editedStudent.place = value,
-          ),
-          Row(
-            children: [
-              const Text('Date of Birth:'),
-              const SizedBox(width: 10),
-              TextButton(
-                onPressed: () async {
-                  final pickedDate = await showDatePicker(
-                    context: context,
-                    // initialDate: _editedStudent.dob ?? DateTime.now(),
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _editedStudent.dob = pickedDate.toString();
-                    });
-                  }
-                },
-                child: Text(
-                  //  DateFormat('yMMMMd').format(_editedStudent.dob ?? DateTime.now()),
-                  DateFormat('yMMMMd').format(DateTime.now()),
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-            ],
-          ),
-          DropdownButtonFormField<String>(
-            value: _editedStudent.gender,
-            items: const [
-              DropdownMenuItem(value: 'Male', child: Text('Male')),
-              DropdownMenuItem(value: 'Female', child: Text('Female')),
-              DropdownMenuItem(value: 'Other', child: Text('Other')),
-            ],
-            onChanged: (value) =>
-                setState(() => _editedStudent.gender = value!),
-            validator: (value) => value == null ? 'Please select gender' : null,
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!
-                    .save(); // Save form data to _editedStudent
-                final updatedStudentId =
-                    await StudentService.editStudentDetails(_editedStudent);
-                if (updatedStudentId != 0) {
-                  // Update successful
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Student updated successfully')),
-                  );
-                  // Update state to reflect changes (optional)
-                  setState(() {
-                    widget.studentDetail.name = _editedStudent.name;
-                    widget.studentDetail.place = _editedStudent.place;
-                    widget.studentDetail.dob = _editedStudent.dob;
-                    widget.studentDetail.gender = _editedStudent.gender;
-                  });
-                } else {
-                  // Update failed (e.g., database error)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content:
-                            Text('An error occurred while updating student')),
-                  );
-                }
-              }
-            },
-            child: const Text('Update'),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildEditForm() {
+  //   return Form(
+  //     key: _formKey,
+  //     child: Column(
+  //       children: [
+  //         TextFormField(
+  //           initialValue: _editedStudent.name,
+  //           decoration: const InputDecoration(labelText: 'Name'),
+  //           validator: (value) => value!.isEmpty ? 'Please enter a name' : null,
+  //           onSaved: (value) => _editedStudent.name = value,
+  //         ),
+  //         TextFormField(
+  //           initialValue: _editedStudent.place,
+  //           decoration: const InputDecoration(labelText: 'Place'),
+  //           validator: (value) =>
+  //               value!.isEmpty ? 'Please enter a place' : null,
+  //           onSaved: (value) => _editedStudent.place = value,
+  //         ),
+  //         Row(
+  //           children: [
+  //             const Text('Date of Birth:'),
+  //             const SizedBox(width: 10),
+  //             TextButton(
+  //               onPressed: () async {
+  //                 final pickedDate = await showDatePicker(
+  //                   context: context,
+  //                   // initialDate: _editedStudent.dob ?? DateTime.now(),
+  //                   initialDate: DateTime.now(),
+  //                   firstDate: DateTime(1900),
+  //                   lastDate: DateTime.now(),
+  //                 );
+  //                 if (pickedDate != null) {
+  //                   setState(() {
+  //                     _editedStudent.dob = pickedDate.toString();
+  //                   });
+  //                 }
+  //               },
+  //               child: Text(
+  //                 //  DateFormat('yMMMMd').format(_editedStudent.dob ?? DateTime.now()),
+  //                 DateFormat('yMMMMd').format(DateTime.now()),
+  //                 style: const TextStyle(fontSize: 16),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         DropdownButtonFormField<String>(
+  //           value: _editedStudent.gender,
+  //           items: const [
+  //             DropdownMenuItem(value: 'Male', child: Text('Male')),
+  //             DropdownMenuItem(value: 'Female', child: Text('Female')),
+  //             DropdownMenuItem(value: 'Other', child: Text('Other')),
+  //           ],
+  //           onChanged: (value) =>
+  //               setState(() => _editedStudent.gender = value!),
+  //           validator: (value) => value == null ? 'Please select gender' : null,
+  //         ),
+  //         ElevatedButton(
+  //           onPressed: () async {
+  //             if (_formKey.currentState!.validate()) {
+  //               _formKey.currentState!
+  //                   .save(); // Save form data to _editedStudent
+  //               final updatedStudentId =
+  //                   await StudentService.editStudentDetails(_editedStudent);
+  //               if (updatedStudentId != 0) {
+  //                 // Update successful
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   const SnackBar(
+  //                       content: Text('Student updated successfully')),
+  //                 );
+  //                 // Update state to reflect changes (optional)
+  //                 setState(() {
+  //                   widget.studentDetail.name = _editedStudent.name;
+  //                   widget.studentDetail.place = _editedStudent.place;
+  //                   widget.studentDetail.dob = _editedStudent.dob;
+  //                   widget.studentDetail.gender = _editedStudent.gender;
+  //                 });
+  //               } else {
+  //                 // Update failed (e.g., database error)
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   const SnackBar(
+  //                       content:
+  //                           Text('An error occurred while updating student')),
+  //                 );
+  //               }
+  //             }
+  //           },
+  //           child: const Text('Update'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
             Text('Gender: ${widget.studentDetail.gender ?? 'N/A'}'),
             Text('Date of Birth: ${widget.studentDetail.dob ?? 'N/A'}'),
             Text('Age: ${widget.studentDetail.age ?? 'N/A'}'),
-            Text('id is: ${widget.studentDetail.id ?? 'N/A'}'),
+            // Text('id is: ${widget.studentDetail.id ?? 'N/A'}'),
             const SizedBox(height: 20),
             // Add a button to enable/disable edit form
             // ElevatedButton(
@@ -202,64 +202,3 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
     );
   }
 }
-
-
-
-
-
-/*
-import 'package:flutter/material.dart';
-import 'package:sample_student_record_using_sqflite/models/student_data.dart';
-import 'package:sample_student_record_using_sqflite/utils/helper_functions.dart';
-
-class ViewStudentsDetailsScreen extends StatelessWidget {
-  const ViewStudentsDetailsScreen({super.key, required this.studentDetail});
-
-  final Student studentDetail;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(studentDetail.name ?? 'Student Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (studentDetail.profilePic != null)
-              GestureDetector(
-                onTap: () {
-                  showProfilePictureDialog(context, studentDetail.profilePic!);
-                },
-                child: Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: MemoryImage(studentDetail.profilePic!),
-                  ),
-                ),
-              )
-            else
-              const Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  child: Icon(
-                    Icons.account_circle,
-                    size: 100,
-                  ),
-                ),
-              ),
-            const SizedBox(height: 20),
-            Text('Name: ${studentDetail.name ?? 'N/A'}'),
-            Text('Place: ${studentDetail.place ?? 'N/A'}'),
-            Text('Gender: ${studentDetail.gender ?? 'N/A'}'),
-            Text('Date of Birth: ${studentDetail.dob ?? 'N/A'}'),
-            Text('Age: ${studentDetail.age ?? 'N/A'}'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
