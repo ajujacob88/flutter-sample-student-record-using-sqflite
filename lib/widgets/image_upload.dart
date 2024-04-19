@@ -143,7 +143,7 @@ class _ImageUploadState extends State<ImageUpload> {
                             },
                             child: Container(
                               // Rectangular box
-                              height: 30.0, // Adjust height as needed
+                              height: 35.0, // Adjust height as needed
                               color: Colors.black
                                   .withOpacity(0.5), // Semi-transparent black
                               child: const Center(
