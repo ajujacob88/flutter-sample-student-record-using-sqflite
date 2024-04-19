@@ -149,7 +149,7 @@ class _ImageUploadState extends State<ImageUpload> {
                               child: const Center(
                                 child: Text(
                                   'Remove ',
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -157,7 +157,12 @@ class _ImageUploadState extends State<ImageUpload> {
                         ),
                       ],
                     )
-                  : Text('Profile Pic'),
+                  : const Text(
+                      'Profile Pic',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
             ],
           ),
         ),
