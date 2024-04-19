@@ -197,6 +197,8 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
                     widget.studentDetail.place = updatedStudent.place;
                     widget.studentDetail.dob = updatedStudent.dob;
                     widget.studentDetail.gender = updatedStudent.gender;
+                    widget.studentDetail.age = updatedStudent.age;
+                    widget.studentDetail.profilePic = updatedStudent.profilePic;
                   });
                 }
               },

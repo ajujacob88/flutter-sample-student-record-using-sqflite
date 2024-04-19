@@ -241,7 +241,22 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                                     studentDetail: studentsList[index],
                                   )),
                             ),
-                          );
+                          )
+                              //     .then((updatedStudent) {
+                              //   if (updatedStudent != null) {
+                              //     // Update your student list with the edited data
+                              //     setState(() {
+                              //       // Find the index of the student to update
+                              //       int indexToUpdate = studentsList.indexWhere(
+                              //           (student) =>
+                              //               student.id == updatedStudent.id);
+                              //       if (indexToUpdate != -1) {
+                              //         studentsList[indexToUpdate] = updatedStudent;
+                              //       }
+                              //     });
+                              //   }
+                              // });
+                              ;
                         },
                       ),
                     );
