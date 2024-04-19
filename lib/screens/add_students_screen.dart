@@ -108,6 +108,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
       print('debug check1111');
       print('syudent id is ${student.id}');
       _updateStudent(student);
+      Navigator.pop(context, student);
       // addStudent(student);
     } else {
       addStudent(student);
@@ -282,11 +283,11 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                       //           studentsList: widget.studentsList,
                       //         )));
 
-                      _isEdit
-                          ? Navigator.of(context).pop()
-                          : Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (ctx) => AddStudentsScreen()));
+                      // _isEdit
+                      //     ? Navigator.of(context).pop(context, _editedStudent)
+                      //     : Navigator.of(context).pushReplacement(
+                      //         MaterialPageRoute(
+                      //             builder: (ctx) => AddStudentsScreen()));
                       _handleSubmit();
                       // _formKey.currentState!.reset(); // Reset the form
 

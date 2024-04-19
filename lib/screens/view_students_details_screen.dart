@@ -191,7 +191,13 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
                     const SnackBar(
                         content: Text('Student updated successfully')),
                   );
-                  // Update UI with changes if needed (optional)
+                  // Update UI with changes if needed
+                  setState(() {
+                    widget.studentDetail.name = updatedStudent.name;
+                    widget.studentDetail.place = updatedStudent.place;
+                    widget.studentDetail.dob = updatedStudent.dob;
+                    widget.studentDetail.gender = updatedStudent.gender;
+                  });
                 }
               },
               child: const Text('Edit Details'),

@@ -216,34 +216,34 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                       onDismissed: (direction) =>
                           _handleDeleteStudent(studentsList[index], direction),
                       child: ListTile(
-                          title: Text(studentsList[index].name!),
-                          subtitle: Text(studentsList[index].place!),
-                          leading: studentsList[index].profilePic != null
-                              ? GestureDetector(
-                                  onTap: () {
-                                    showProfilePictureDialog(context,
-                                        studentsList[index].profilePic!);
-                                  },
-                                  child: CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage: MemoryImage(
-                                          studentsList[index].profilePic!)),
-                                )
-                              : const CircleAvatar(
-                                  radius: 25,
-                                  child: Icon(Icons.account_circle_rounded),
-                                  // Adjust the radius as needed
-                                ),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: ((context) =>
-                                    ViewStudentsDetailsScreen(
-                                      studentDetail: studentsList[index],
-                                    )),
+                        title: Text(studentsList[index].name!),
+                        subtitle: Text(studentsList[index].place!),
+                        leading: studentsList[index].profilePic != null
+                            ? GestureDetector(
+                                onTap: () {
+                                  showProfilePictureDialog(
+                                      context, studentsList[index].profilePic!);
+                                },
+                                child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: MemoryImage(
+                                        studentsList[index].profilePic!)),
+                              )
+                            : const CircleAvatar(
+                                radius: 25,
+                                child: Icon(Icons.account_circle_rounded),
+                                // Adjust the radius as needed
                               ),
-                            );
-                          }),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: ((context) => ViewStudentsDetailsScreen(
+                                    studentDetail: studentsList[index],
+                                  )),
+                            ),
+                          );
+                        },
+                      ),
                     );
                   },
                 ),
