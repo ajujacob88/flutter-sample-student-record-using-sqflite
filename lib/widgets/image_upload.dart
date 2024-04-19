@@ -96,7 +96,7 @@ class _ImageUploadState extends State<ImageUpload> {
       widget.onSelectImage(_imageBytes, imageController, clearImage);
       //  widget.forClearImage(clearImage);
     } on Exception catch (e) {
-// Handle permission errors or other platform exceptions
+      // Handle permission errors or other platform exceptions
       if (mounted) {
         print('Error picking image: $e');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -113,16 +113,6 @@ class _ImageUploadState extends State<ImageUpload> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Expanded(
-        //   child: TextFormField(
-        //     readOnly: true,
-        //     controller: imageController,
-        //     enabled: false,
-        //     decoration: const InputDecoration(
-        //       labelText: 'Profile Pic',
-        //     ),
-        //   ),
-        // ),
         Expanded(
           child: TextFormField(
             readOnly: true,
@@ -131,27 +121,37 @@ class _ImageUploadState extends State<ImageUpload> {
             decoration: InputDecoration(
               labelText: 'Profile Pic',
               border: InputBorder.none,
-              // suffixIcon: pickedFilePath != null
-              //     ? SizedBox(
-              //         width: 350,
-              //         height: 100,
-              //         child: Image.file(File(pickedFilePath!)),
-              //       )
-              //     : null,
-
-              suffixIcon: _imageBytes != null
-                  ? Image.memory(
-                      _imageBytes!,
-                      width: 130,
-                      height: 130,
-                      fit: BoxFit.fill,
-                    )
-                  : null,
+              suffixIcon: Stack(
+                children: [
+                  _imageBytes != null
+                      ? Image.memory(
+                          _imageBytes!,
+                          width: 130,
+                          height: 130,
+                          fit: BoxFit.fill,
+                        )
+                      : const SizedBox(),
+                  _imageBytes != null
+                      ? Positioned(
+                          right: 0.0,
+                          child: IconButton(
+                            icon: const Icon(Icons.close),
+                            // onPressed: () => setState(() => _imageBytes = null),
+                            onPressed: () {
+                              setState(() {
+                                _imageBytes = null;
+                              });
+                              setState(() {});
+                            },
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
             ),
           ),
         ),
         const SizedBox(width: 16),
-
         Expanded(
           child: OutlinedButton(
             onPressed: _showImageSourceDialog,
@@ -171,12 +171,6 @@ class _ImageUploadState extends State<ImageUpload> {
             child: const Text('Upload'),
           ),
         ),
-        // Expanded(
-        //   child: ElevatedButton(
-        //     onPressed: _uploadImage,
-        //     child: const Text('Upload'),
-        //   ),
-        // ),
       ],
     );
   }
