@@ -235,28 +235,31 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                                 // Adjust the radius as needed
                               ),
                         onTap: () {
-                          Navigator.of(context).push(
+                          Navigator.of(context)
+                              .push(
                             MaterialPageRoute(
                               builder: ((context) => ViewStudentsDetailsScreen(
                                     studentDetail: studentsList[index],
                                   )),
                             ),
                           )
-                              //     .then((updatedStudent) {
-                              //   if (updatedStudent != null) {
-                              //     // Update your student list with the edited data
-                              //     setState(() {
-                              //       // Find the index of the student to update
-                              //       int indexToUpdate = studentsList.indexWhere(
-                              //           (student) =>
-                              //               student.id == updatedStudent.id);
-                              //       if (indexToUpdate != -1) {
-                              //         studentsList[indexToUpdate] = updatedStudent;
-                              //       }
-                              //     });
-                              //   }
-                              // });
-                              ;
+                              .then((updatedStudent) {
+                            if (updatedStudent != null) {
+                              print(
+                                  'debug check 1 updated student issssssss $updatedStudent');
+
+                              // Update your student list with the edited data
+                              setState(() {
+                                // Find the index of the student to update
+                                int indexToUpdate = studentsList.indexWhere(
+                                    (student) =>
+                                        student.id == updatedStudent.id);
+                                if (indexToUpdate != -1) {
+                                  studentsList[indexToUpdate] = updatedStudent;
+                                }
+                              });
+                            }
+                          });
                         },
                       ),
                     );

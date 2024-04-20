@@ -112,99 +112,137 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
   //     ),
   //   );
   // }
+  bool _detailsUpdated = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   print('debug check init stateeeeeeeeeee');
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     if (_detailsUpdated) {
+  //       Navigator.pop(context, 'check');
+  //     }
+  //   });
+  // }
+
+  Student? updatedStudent;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.studentDetail.name ?? 'Student Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (widget.studentDetail.profilePic != null)
-              GestureDetector(
-                onTap: () {
-                  showProfilePictureDialog(
-                      context, widget.studentDetail.profilePic!);
-                },
-                child: Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        MemoryImage(widget.studentDetail.profilePic!),
-                  ),
-                ),
-              )
-            else
-              const Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  child: Icon(
-                    Icons.account_circle,
-                    size: 100,
-                  ),
-                ),
-              ),
-            const SizedBox(height: 20),
-            Text('Name: ${widget.studentDetail.name ?? 'N/A'}'),
-            Text('Place: ${widget.studentDetail.place ?? 'N/A'}'),
-            Text('Gender: ${widget.studentDetail.gender ?? 'N/A'}'),
-            Text('Date of Birth: ${widget.studentDetail.dob ?? 'N/A'}'),
-            Text('Age: ${widget.studentDetail.age ?? 'N/A'}'),
-            // Text('id is: ${widget.studentDetail.id ?? 'N/A'}'),
-            const SizedBox(height: 20),
-            // Add a button to enable/disable edit form
-            // ElevatedButton(
-            //   onPressed: () => setState(() => _isEditEnabled = !_isEditEnabled),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       _isEditEnabled
-            //           ? const Icon(Icons.edit_off)
-            //           : const Icon(Icons.edit),
-            //       const SizedBox(width: 5),
-            //       Text(_isEditEnabled ? 'Disable Editing' : 'Enable Editing'),
-            //     ],
-            //   ),
-            // ),
-            // // Conditionally display the edit form
-            // if (_isEditEnabled) _buildEditForm(),
-
-            ElevatedButton(
-              onPressed: () async {
-                // Navigate to AddStudentScreen with student details for editing
-                final updatedStudent = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddStudentsScreen(
-                      initialStudent: widget.studentDetail,
-                      isEditt: true, // Flag for editing mode
+    // return WillPopScope(
+    //   onWillPop: () async {
+    //     // Return false to prevent the screen from being popped immediately
+    //     if (_detailsUpdated) {
+    //       print('debuggg check will popdcope');
+    //       Navigator.pop(context, updatedStudent);
+    //       return false;
+    //     } else {
+    //       return true;
+    //     }
+    //   },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (_) async {
+        Navigator.pop(context, updatedStudent);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.studentDetail.name ?? 'Student Details'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.studentDetail.profilePic != null)
+                GestureDetector(
+                  onTap: () {
+                    showProfilePictureDialog(
+                        context, widget.studentDetail.profilePic!);
+                  },
+                  child: Center(
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage:
+                          MemoryImage(widget.studentDetail.profilePic!),
                     ),
                   ),
-                );
-                if (updatedStudent != null) {
-                  // Update successful (handle the updated student data)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Student updated successfully')),
+                )
+              else
+                const Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    child: Icon(
+                      Icons.account_circle,
+                      size: 100,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 20),
+              Text('Name: ${widget.studentDetail.name ?? 'N/A'}'),
+              Text('Place: ${widget.studentDetail.place ?? 'N/A'}'),
+              Text('Gender: ${widget.studentDetail.gender ?? 'N/A'}'),
+              Text('Date of Birth: ${widget.studentDetail.dob ?? 'N/A'}'),
+              Text('Age: ${widget.studentDetail.age ?? 'N/A'}'),
+              // Text('id is: ${widget.studentDetail.id ?? 'N/A'}'),
+              const SizedBox(height: 20),
+              // Add a button to enable/disable edit form
+              // ElevatedButton(
+              //   onPressed: () => setState(() => _isEditEnabled = !_isEditEnabled),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       _isEditEnabled
+              //           ? const Icon(Icons.edit_off)
+              //           : const Icon(Icons.edit),
+              //       const SizedBox(width: 5),
+              //       Text(_isEditEnabled ? 'Disable Editing' : 'Enable Editing'),
+              //     ],
+              //   ),
+              // ),
+              // // Conditionally display the edit form
+              // if (_isEditEnabled) _buildEditForm(),
+
+              ElevatedButton(
+                onPressed: () async {
+                  // Navigate to AddStudentScreen with student details for editing
+                  updatedStudent = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddStudentsScreen(
+                        initialStudent: widget.studentDetail,
+                        isEditt: true, // Flag for editing mode
+                      ),
+                    ),
                   );
-                  // Update UI with changes if needed
-                  setState(() {
-                    widget.studentDetail.name = updatedStudent.name;
-                    widget.studentDetail.place = updatedStudent.place;
-                    widget.studentDetail.dob = updatedStudent.dob;
-                    widget.studentDetail.gender = updatedStudent.gender;
-                    widget.studentDetail.age = updatedStudent.age;
-                    widget.studentDetail.profilePic = updatedStudent.profilePic;
-                  });
-                }
-              },
-              child: const Text('Edit Details'),
-            ),
-          ],
+                  if (updatedStudent != null) {
+                    // Update successful (handle the updated student data)
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Student updated successfully')),
+                    );
+                    // Update UI with changes if needed
+                    setState(
+                      () {
+                        widget.studentDetail.name = updatedStudent!.name;
+                        widget.studentDetail.place = updatedStudent!.place;
+                        widget.studentDetail.dob = updatedStudent!.dob;
+                        widget.studentDetail.gender = updatedStudent!.gender;
+                        widget.studentDetail.age = updatedStudent!.age;
+                        widget.studentDetail.profilePic =
+                            updatedStudent!.profilePic;
+                      },
+                    );
+
+                    // Pass the updated student back to the list screen
+                    //   Navigator.pop(context, updatedStudent);
+                    // Pass the updated student back to the list screen
+                    _detailsUpdated = true;
+                  }
+                },
+                child: const Text('Edit Details'),
+              ),
+            ],
+          ),
         ),
       ),
     );
