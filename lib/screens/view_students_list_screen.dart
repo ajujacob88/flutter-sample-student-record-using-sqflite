@@ -166,6 +166,67 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     }
   }
 
+  void _handleLongPress(int studentId) async {
+    // await Vibration.vibrate(
+    //     duration: 50); // Vibrate for 50 milliseconds on long press
+    setState(() {
+      _isMultipleSelection = true;
+      if (selectedStudents.contains(studentId)) {
+        selectedStudents.remove(studentId);
+      } else {
+        selectedStudents.add(studentId);
+      }
+    });
+  }
+
+  void _handleTapOutside() async {
+    // await Vibration.vibrate(
+    //     duration: 50); // Vibrate for 50 milliseconds on long press
+    print('gebugg checkkkkkkkkkkkk handle tap outsideeeeeeeeeeeeeee');
+    setState(() {
+      _isMultipleSelection = false;
+
+      // selectedStudents.removeAll(selectedStudents);
+      selectedStudents.clear();
+    });
+  }
+
+  void _handleMultiDeleteStudents() async {
+    if (selectedStudents.isEmpty) return;
+
+    // final confirmed = await showConfirmationDialog(
+    //   context,
+    //   title: 'Delete Students',
+    //   content:
+    //       'Are you sure you want to delete ${selectedStudents.length} selected students?',
+    // );
+
+    final confirmed = await showDialog(
+      context: context,
+      builder: (context) => ConfirmationDialog(
+        title: 'Confirm Delete',
+        content:
+            'Are you sure you want to delete ${selectedStudents.length} students',
+        onCancel: (context) => Navigator.pop(context, false),
+        onConfirm: (context) => Navigator.pop(context, true),
+      ),
+    );
+
+    if (confirmed) {
+      // Perform multi-deletion logic (call your student service or database helper)
+      // Here's an example assuming you have a StudentService:
+      for (final studentId in selectedStudents) {
+        // await StudentService.deleteStudent(studentId);
+        _performActualDelete(studentId);
+      }
+
+      setState(() {
+        selectedStudents.clear();
+        // Update studentsList if needed based on deletion results
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -295,66 +356,6 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                         'List is empty')), // Show "List is empty" if no students found
       ),
     );
-  }
-
-  void _handleLongPress(int studentId) async {
-    // await Vibration.vibrate(
-    //     duration: 50); // Vibrate for 50 milliseconds on long press
-    setState(() {
-      _isMultipleSelection = true;
-      if (selectedStudents.contains(studentId)) {
-        selectedStudents.remove(studentId);
-      } else {
-        selectedStudents.add(studentId);
-      }
-    });
-  }
-
-  void _handleTapOutside() async {
-    // await Vibration.vibrate(
-    //     duration: 50); // Vibrate for 50 milliseconds on long press
-    print('gebugg checkkkkkkkkkkkk handle tap outsideeeeeeeeeeeeeee');
-    setState(() {
-      _isMultipleSelection = false;
-
-      // selectedStudents.removeAll(selectedStudents);
-      selectedStudents.clear();
-    });
-  }
-
-  void _handleMultiDeleteStudents() async {
-    if (selectedStudents.isEmpty) return;
-
-    // final confirmed = await showConfirmationDialog(
-    //   context,
-    //   title: 'Delete Students',
-    //   content:
-    //       'Are you sure you want to delete ${selectedStudents.length} selected students?',
-    // );
-
-    final confirmed = await showDialog(
-      context: context,
-      builder: (context) => ConfirmationDialog(
-        title: 'Confirm Delete',
-        content:
-            'Are you sure you want to delete ${selectedStudents.length} students',
-        onCancel: (context) => Navigator.pop(context, false),
-        onConfirm: (context) => Navigator.pop(context, true),
-      ),
-    );
-
-    if (confirmed) {
-      // Perform multi-deletion logic (call your student service or database helper)
-      // Here's an example assuming you have a StudentService:
-      for (final studentId in selectedStudents) {
-        await StudentService.deleteStudent(studentId);
-      }
-
-      setState(() {
-        selectedStudents.clear();
-        // Update studentsList if needed based on deletion results
-      });
-    }
   }
 }
 
@@ -948,3 +949,85 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
 
 
 */
+
+/*
+
+
+  void _handleMultiDeleteStudents(List<Student> studentsList) async {
+    if (selectedStudents.isEmpty) return;
+
+    final confirmed = await showDialog(
+      context: context,
+      builder: (context) => ConfirmationDialog(
+        title: 'Confirm Delete',
+        content:
+            'Are you sure you want to delete ${selectedStudents.length} students',
+        onCancel: (context) => Navigator.pop(context, false),
+        onConfirm: (context) => Navigator.pop(context, true),
+      ),
+    );
+
+    if (confirmed) {
+      // Perform multi-deletion logic (call your student service or database helper)
+      // Here's an example assuming you have a StudentService:
+
+      List<int> multiDeletedStudentIndex = [];
+      List<Student> multiDeletedStudents = [];
+      bool isStudentDeleted = false;
+
+      for (final studentId in selectedStudents) {
+        multiDeletedStudentIndex.add(studentId);
+        multiDeletedStudents.add(studentsList[studentId]);
+        setState(() {
+          studentsList.removeWhere((s) => s.id == studentId);
+          isStudentDeleted = true;
+        });
+
+        if (mounted) {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => StudentDeleteUndoSheet(
+              student: multiDeletedStudents[0],
+              onUndoDelete: () {
+                // Handle undo logic (cancel timer and add student back to list)
+
+                // Dismiss bottom sheet on undo
+                Navigator.pop(context, true);
+
+                setState(() {
+                  isStudentDeleted = false;
+                  // Add student back to list
+                  //studentsList.add(deletedStudent!);
+                  //  studentsList.insert(studentsList.indexOf(student), student);
+                  for (final studentId in selectedStudents) {
+                    studentsList.insert(studentId, studentsList[studentId]);
+                  }
+                  multiDeletedStudents = [];
+                });
+              },
+            ),
+          ).then(
+            (_) {
+              print('debug chck 1 value is $isStudentDeleted');
+              if (isStudentDeleted != false) {
+                for (final studentId in selectedStudents) {
+                  _performActualDelete(studentId);
+                }
+              }
+            },
+          );
+        }
+      }
+
+      // for (final studentId in selectedStudents) {
+      //   _performActualDelete(studentId);
+      // }
+
+      // setState(() {
+      //   selectedStudents.clear();
+      //   // Update studentsList if needed based on deletion results
+      // });
+    }
+  }
+
+  */
