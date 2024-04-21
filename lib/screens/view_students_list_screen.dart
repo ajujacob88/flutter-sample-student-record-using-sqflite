@@ -180,7 +180,9 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Students List'),
+          title: _isMultipleSelection
+              ? Text('${selectedStudents.length} Selected')
+              : const Text('Students List'),
           actions: [
             _isMultipleSelection
                 ? IconButton(
