@@ -174,8 +174,10 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     //   },
 
     return PopScope(
-      canPop: false,
-      onPopInvoked: (_) => _handleTapOutside(),
+      canPop: _isMultipleSelection ? false : true,
+      onPopInvoked: (_) {
+        _handleTapOutside();
+      },
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Students List'),
