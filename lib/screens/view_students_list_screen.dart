@@ -218,16 +218,24 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
 
       for (final studentId in selectedStudents) {
         // await StudentService.deleteStudent(studentId);
-        setState(() {
-          studentsList.removeWhere((s) => s.id == studentId);
-        });
+        // setState(() {
+        //   studentsList.removeWhere((s) => s.id == studentId);
+        // });
         _performActualDelete(studentId);
       }
 
+      // setState(() {
+      //   studentsList.removeWhere((s) => selectedStudents.contains(s.id));
+
+      //   selectedStudents.clear();
+      //   // Update studentsList if needed based on deletion results
+      // });
+
+      studentsList.removeWhere((s) => selectedStudents.contains(s.id));
       setState(() {
-        selectedStudents.clear();
-        // Update studentsList if needed based on deletion results
+        _isMultipleSelection = false;
       });
+      selectedStudents.clear();
     }
   }
 
