@@ -27,22 +27,21 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
   Set<int> selectedStudents = {};
   bool _isMultipleSelection = false;
 
-  Future<void> fetchStudents() async {
+  Future<List<Student>> fetchStudents() async {
     try {
       // setState(() {
       //   _isLoading = true; // Set loading state to true
       // });
       // final students = await databaseHelper.getAllStudents();
       //final students = await stdserv.getAllStudents();
-      final students = await StudentService.getAllStudents();
+      // final students = await StudentService.getAllStudents();
+      // setState(() {
+      //   studentsList = students;
+      //   _isLoading = false; // Set loading state to false after fetching
+      // });
 
-      if (mounted) {
-        studentsList = students;
-        setState(() {
-          _isLoading = false; // Set loading state to false after fetching
-        });
-      }
-      ;
+      final students = await StudentService.getAllStudents();
+      return students;
     } catch (error) {
       // print('Error fetching students: $error');
       // Display an error message to the user (e.g., using a SnackBar)
@@ -52,17 +51,20 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
             content: Text('An error occurred while fetching students.'),
           ),
         );
-        setState(() {
-          _isLoading = false; // Set loading state to false after error
-        });
       }
+      rethrow;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchStudents();
+    fetchStudents().then((students) {
+      setState(() {
+        _isLoading = false;
+        studentsList = students;
+      });
+    });
   }
 
   Future<void> _handleDeleteStudent(
