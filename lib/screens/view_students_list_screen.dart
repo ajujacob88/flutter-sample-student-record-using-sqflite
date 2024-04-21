@@ -18,7 +18,7 @@ class ViewStudentsListScreen extends StatefulWidget {
 }
 
 class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
-  bool _isLoading = false; // New state variable
+  bool _isLoading = true; // New state variable
 
   //since the database functions are defined in student service as static methods, this functions can be assessed directly with classname and dot, not by creating object(because the functions are written as static, means that Static methods are associated with the class itself rather than instances of the class. They can be accessed directly using the class name followed by a dot (.).)
   // final StudentService stdserv = StudentService();
@@ -29,16 +29,20 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
 
   Future<void> fetchStudents() async {
     try {
-      setState(() {
-        _isLoading = true; // Set loading state to true
-      });
+      // setState(() {
+      //   _isLoading = true; // Set loading state to true
+      // });
       // final students = await databaseHelper.getAllStudents();
       //final students = await stdserv.getAllStudents();
       final students = await StudentService.getAllStudents();
-      setState(() {
+
+      if (mounted) {
         studentsList = students;
-        _isLoading = false; // Set loading state to false after fetching
-      });
+        setState(() {
+          _isLoading = false; // Set loading state to false after fetching
+        });
+      }
+      ;
     } catch (error) {
       // print('Error fetching students: $error');
       // Display an error message to the user (e.g., using a SnackBar)
@@ -48,6 +52,9 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
             content: Text('An error occurred while fetching students.'),
           ),
         );
+        setState(() {
+          _isLoading = false; // Set loading state to false after error
+        });
       }
     }
   }
@@ -159,20 +166,6 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //print('st list is $studentsList ');
-
-    // return WillPopScope(
-    //   onWillPop: () async {
-    //     if (_isMultipleSelection) {
-    //       setState(() {
-    //         _isMultipleSelection = false;
-    //         selectedStudents.clear();
-    //       });
-    //       return false; // Block back button press while in multi-selection mode
-    //     }
-    //     return true; // Allow back button press otherwise
-    //   },
-
     return PopScope(
       canPop: _isMultipleSelection ? false : true,
       onPopInvoked: (_) {
@@ -204,12 +197,8 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
             ? const Center(
                 child:
                     CircularProgressIndicator()) // Show progress indicator while loading
-            : studentsList.isEmpty
-                ? const Center(
-                    child: Text(
-                        'List is empty')) // Show "List is empty" if no students found
-
-                : ListView.separated(
+            : studentsList.isNotEmpty
+                ? ListView.separated(
                     separatorBuilder: (context, index) {
                       return const Divider();
                     },
@@ -298,7 +287,10 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                         ),
                       );
                     },
-                  ),
+                  )
+                : const Center(
+                    child: Text(
+                        'List is empty')), // Show "List is empty" if no students found
       ),
     );
   }
