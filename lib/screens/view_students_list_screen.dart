@@ -191,7 +191,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     });
   }
 
-  void _handleMultiDeleteStudents() async {
+  void _handleMultiDeleteStudents(List<Student> studentListt) async {
     if (selectedStudents.isEmpty) return;
 
     // final confirmed = await showConfirmationDialog(
@@ -215,8 +215,12 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
     if (confirmed) {
       // Perform multi-deletion logic (call your student service or database helper)
       // Here's an example assuming you have a StudentService:
+
       for (final studentId in selectedStudents) {
         // await StudentService.deleteStudent(studentId);
+        setState(() {
+          studentsList.removeWhere((s) => s.id == studentId);
+        });
         _performActualDelete(studentId);
       }
 
@@ -242,7 +246,9 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
           actions: [
             _isMultipleSelection
                 ? IconButton(
-                    onPressed: _handleMultiDeleteStudents,
+                    onPressed: () {
+                      _handleMultiDeleteStudents(studentsList);
+                    },
                     icon: const Icon(Icons.delete),
                   )
                 : IconButton(
