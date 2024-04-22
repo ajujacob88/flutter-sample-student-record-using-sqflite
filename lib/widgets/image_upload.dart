@@ -93,12 +93,6 @@ class _ImageUploadState extends State<ImageUpload> {
       // print(
       //     'debug checkk 1 picked file = $pickedFile and widget.initialimag = ${widget.initialImageBytes}');
 
-      if (pickedFile == null && widget.initialImageBytes != null) {
-        print(
-            'debug checkkkkkkkkkkkkkk picked file = $pickedFile and widget.initialimag = ${widget.initialImageBytes}');
-        _imageBytes = widget.initialImageBytes;
-      }
-
       widget.onSelectImage(_imageBytes, imageController, clearImage);
       //  widget.forClearImage(clearImage);
     } on Exception catch (e) {
@@ -173,35 +167,6 @@ class _ImageUploadState extends State<ImageUpload> {
             ],
           ),
         ),
-
-        // Expanded(
-        //   child: Stack(
-        //     children: [
-        //       _imageBytes != null
-        //           ? Image.memory(
-        //               _imageBytes!,
-        //               width: 130,
-        //               height: 130,
-        //               fit: BoxFit.fill,
-        //             )
-        //           : Text('Profile Pic'),
-        //       _imageBytes != null
-        //           ? Positioned(
-        //               right: 0.0,
-        //               child: IconButton(
-        //                 icon: const Icon(Icons.close),
-        //                 // onPressed: () => setState(() => _imageBytes = null),
-        //                 onPressed: () {
-        //                   setState(() {
-        //                     _imageBytes = null;
-        //                   });
-        //                 },
-        //               ),
-        //             )
-        //           : SizedBox(),
-        //     ],
-        //   ),
-        // ),
         const SizedBox(width: 16),
         Expanded(
           child: OutlinedButton(

@@ -87,10 +87,12 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
                   );
                   if (updatedStudent != null) {
                     // Update successful (handle the updated student data)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Student updated successfully')),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(
+                    //     content: Text('Student updated successfully'),
+                    //     duration: Duration(seconds: 2),
+                    //   ),
+                    // );
                     // Update UI with changes if needed
                     setState(
                       () {
