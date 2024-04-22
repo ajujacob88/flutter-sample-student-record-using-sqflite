@@ -34,15 +34,30 @@ void main() {
 //   fontFamily: 'Roboto',
 // );
 
+final selectedTheme = ThemeData(
+  primarySwatch: Colors.blue,
+  appBarTheme: const AppBarTheme(
+    color: Color.fromARGB(16, 71, 1, 83),
+    // Set your desired app bar color here
+    // titleTextStyle: TextStyle(color: Colors.white),
+  ),
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Sample Student Record App',
-      //  theme: theme,
-      home: HomeScreen(),
+      // theme: selectedTheme.copyWith(
+      //   appBarTheme: selectedTheme.appBarTheme.copyWith(
+      //     titleTextStyle:
+      //         TextStyle(color: const Color.fromARGB(255, 243, 201, 33)),
+      //   ),
+      // ),
+      theme: selectedTheme,
+      home: const HomeScreen(),
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => const HomeScreen(),
