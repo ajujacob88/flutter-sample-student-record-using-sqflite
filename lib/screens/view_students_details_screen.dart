@@ -20,125 +20,12 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
 //  late Student _editedStudent = widget.studentDetail; // Copy of student data
 //  bool _isEditEnabled = false; // Flag to enable/disable edit form
 
-  // Widget _buildEditForm() {
-  //   return Form(
-  //     key: _formKey,
-  //     child: Column(
-  //       children: [
-  //         TextFormField(
-  //           initialValue: _editedStudent.name,
-  //           decoration: const InputDecoration(labelText: 'Name'),
-  //           validator: (value) => value!.isEmpty ? 'Please enter a name' : null,
-  //           onSaved: (value) => _editedStudent.name = value,
-  //         ),
-  //         TextFormField(
-  //           initialValue: _editedStudent.place,
-  //           decoration: const InputDecoration(labelText: 'Place'),
-  //           validator: (value) =>
-  //               value!.isEmpty ? 'Please enter a place' : null,
-  //           onSaved: (value) => _editedStudent.place = value,
-  //         ),
-  //         Row(
-  //           children: [
-  //             const Text('Date of Birth:'),
-  //             const SizedBox(width: 10),
-  //             TextButton(
-  //               onPressed: () async {
-  //                 final pickedDate = await showDatePicker(
-  //                   context: context,
-  //                   // initialDate: _editedStudent.dob ?? DateTime.now(),
-  //                   initialDate: DateTime.now(),
-  //                   firstDate: DateTime(1900),
-  //                   lastDate: DateTime.now(),
-  //                 );
-  //                 if (pickedDate != null) {
-  //                   setState(() {
-  //                     _editedStudent.dob = pickedDate.toString();
-  //                   });
-  //                 }
-  //               },
-  //               child: Text(
-  //                 //  DateFormat('yMMMMd').format(_editedStudent.dob ?? DateTime.now()),
-  //                 DateFormat('yMMMMd').format(DateTime.now()),
-  //                 style: const TextStyle(fontSize: 16),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         DropdownButtonFormField<String>(
-  //           value: _editedStudent.gender,
-  //           items: const [
-  //             DropdownMenuItem(value: 'Male', child: Text('Male')),
-  //             DropdownMenuItem(value: 'Female', child: Text('Female')),
-  //             DropdownMenuItem(value: 'Other', child: Text('Other')),
-  //           ],
-  //           onChanged: (value) =>
-  //               setState(() => _editedStudent.gender = value!),
-  //           validator: (value) => value == null ? 'Please select gender' : null,
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: () async {
-  //             if (_formKey.currentState!.validate()) {
-  //               _formKey.currentState!
-  //                   .save(); // Save form data to _editedStudent
-  //               final updatedStudentId =
-  //                   await StudentService.editStudentDetails(_editedStudent);
-  //               if (updatedStudentId != 0) {
-  //                 // Update successful
-  //                 ScaffoldMessenger.of(context).showSnackBar(
-  //                   const SnackBar(
-  //                       content: Text('Student updated successfully')),
-  //                 );
-  //                 // Update state to reflect changes (optional)
-  //                 setState(() {
-  //                   widget.studentDetail.name = _editedStudent.name;
-  //                   widget.studentDetail.place = _editedStudent.place;
-  //                   widget.studentDetail.dob = _editedStudent.dob;
-  //                   widget.studentDetail.gender = _editedStudent.gender;
-  //                 });
-  //               } else {
-  //                 // Update failed (e.g., database error)
-  //                 ScaffoldMessenger.of(context).showSnackBar(
-  //                   const SnackBar(
-  //                       content:
-  //                           Text('An error occurred while updating student')),
-  //                 );
-  //               }
-  //             }
-  //           },
-  //           child: const Text('Update'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
   bool _detailsUpdated = false;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print('debug check init stateeeeeeeeeee');
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     if (_detailsUpdated) {
-  //       Navigator.pop(context, 'check');
-  //     }
-  //   });
-  // }
 
   Student? updatedStudent;
 
   @override
   Widget build(BuildContext context) {
-    // return WillPopScope(
-    //   onWillPop: () async {
-    //     // Return false to prevent the screen from being popped immediately
-    //     if (_detailsUpdated) {
-    //       print('debuggg check will popdcope');
-    //       Navigator.pop(context, updatedStudent);
-    //       return false;
-    //     } else {
-    //       return true;
-    //     }
-    //   },
     return PopScope(
       canPop: false,
       onPopInvoked: (_) async {
@@ -185,22 +72,6 @@ class _ViewStudentsDetailsScreenState extends State<ViewStudentsDetailsScreen> {
               Text('Age: ${widget.studentDetail.age ?? 'N/A'}'),
               // Text('id is: ${widget.studentDetail.id ?? 'N/A'}'),
               const SizedBox(height: 20),
-              // Add a button to enable/disable edit form
-              // ElevatedButton(
-              //   onPressed: () => setState(() => _isEditEnabled = !_isEditEnabled),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       _isEditEnabled
-              //           ? const Icon(Icons.edit_off)
-              //           : const Icon(Icons.edit),
-              //       const SizedBox(width: 5),
-              //       Text(_isEditEnabled ? 'Disable Editing' : 'Enable Editing'),
-              //     ],
-              //   ),
-              // ),
-              // // Conditionally display the edit form
-              // if (_isEditEnabled) _buildEditForm(),
 
               ElevatedButton(
                 onPressed: () async {

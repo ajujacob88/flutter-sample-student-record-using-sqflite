@@ -278,11 +278,10 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      //     builder: (ctx) => AddStudentsScreen(
-                      //           studentsList: widget.studentsList,
-                      //         )));
-
+                      if (!_isEdit) {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (ctx) => const AddStudentsScreen()));
+                      }
                       // _isEdit
                       //     ? Navigator.of(context).pop(context, _editedStudent)
                       //     : Navigator.of(context).pushReplacement(
