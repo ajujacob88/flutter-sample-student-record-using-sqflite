@@ -34,6 +34,7 @@ class _ImageUploadState extends State<ImageUpload> {
       setState(() {
         _imageBytes = widget.initialImageBytes;
       });
+      widget.onSelectImage(_imageBytes, imageController, clearImage);
     }
   }
 
@@ -42,11 +43,6 @@ class _ImageUploadState extends State<ImageUpload> {
       _imageBytes = null;
     });
   }
-
-  // @override
-  // void initState() {
-  //    super.initState();
-  // }
 
   void _showImageSourceDialog() {
     showDialog(
@@ -92,6 +88,15 @@ class _ImageUploadState extends State<ImageUpload> {
         setState(() {
           _imageBytes = Uint8List.fromList(fileBytes);
         });
+      }
+
+      // print(
+      //     'debug checkk 1 picked file = $pickedFile and widget.initialimag = ${widget.initialImageBytes}');
+
+      if (pickedFile == null && widget.initialImageBytes != null) {
+        print(
+            'debug checkkkkkkkkkkkkkk picked file = $pickedFile and widget.initialimag = ${widget.initialImageBytes}');
+        _imageBytes = widget.initialImageBytes;
       }
 
       widget.onSelectImage(_imageBytes, imageController, clearImage);
@@ -140,6 +145,8 @@ class _ImageUploadState extends State<ImageUpload> {
                             // Separate GestureDetector for button
                             onTap: () {
                               setState(() => _imageBytes = null);
+                              widget.onSelectImage(
+                                  _imageBytes, imageController, clearImage);
                             },
                             child: Container(
                               // Rectangular box

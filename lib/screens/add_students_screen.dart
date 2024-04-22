@@ -74,6 +74,12 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     _imageBytes = imageBytes;
     imageController = imageControll;
     clearImg = clearImage;
+    // print(
+    //     'debug checkk 1image bytes = $imageBytes and initialimag = $_initialImageBytes');
+
+    // if (imageBytes == null && _initialImageBytes != null) {
+    //   _imageBytes = _initialImageBytes;
+    // }
   }
 
   // List<Student> studentsList = [];
