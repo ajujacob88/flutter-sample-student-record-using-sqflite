@@ -117,7 +117,7 @@ class _AddStudentsScreenState extends State<AddStudentsScreen> {
     // Show a snackbar to inform the user
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(!_isEdit
+        content: Text(_isEdit
             ? 'Student updated successfully'
             : 'Student added successfully'),
         duration: const Duration(seconds: 2), // Optional duration
