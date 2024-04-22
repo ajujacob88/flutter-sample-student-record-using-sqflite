@@ -194,13 +194,6 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
   void _handleMultiDeleteStudents(List<Student> studentListt) async {
     if (selectedStudents.isEmpty) return;
 
-    // final confirmed = await showConfirmationDialog(
-    //   context,
-    //   title: 'Delete Students',
-    //   content:
-    //       'Are you sure you want to delete ${selectedStudents.length} selected students?',
-    // );
-
     final confirmed = await showDialog(
       context: context,
       builder: (context) => ConfirmationDialog(
@@ -230,12 +223,24 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
       //   selectedStudents.clear();
       //   // Update studentsList if needed based on deletion results
       // });
+      int _selectedStudentCount = selectedStudents.length;
 
       studentsList.removeWhere((s) => selectedStudents.contains(s.id));
       setState(() {
         _isMultipleSelection = false;
       });
       selectedStudents.clear();
+
+      // Show a snackbar to inform the user
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text('$_selectedStudentCount students deleted successfully'),
+            duration: const Duration(seconds: 2), // Optional duration
+          ),
+        );
+      }
     }
   }
 
