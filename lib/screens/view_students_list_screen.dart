@@ -217,12 +217,6 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
         _performActualDelete(studentId);
       }
 
-      // setState(() {
-      //   studentsList.removeWhere((s) => selectedStudents.contains(s.id));
-
-      //   selectedStudents.clear();
-      //   // Update studentsList if needed based on deletion results
-      // });
       int _selectedStudentCount = selectedStudents.length;
 
       studentsList.removeWhere((s) => selectedStudents.contains(s.id));
@@ -254,7 +248,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: _isMultipleSelection
-              ? Color.fromARGB(95, 0, 0, 0)
+              ? const Color.fromARGB(95, 0, 0, 0)
               : Theme.of(context).appBarTheme.backgroundColor,
           foregroundColor: _isMultipleSelection
               ? Colors.white
@@ -314,7 +308,7 @@ class _ViewStudentsListScreenState extends State<ViewStudentsListScreen> {
                           onLongPress: () => _handleLongPress(student.id!),
                           child: Container(
                             color: isSelected
-                                ? Color.fromARGB(18, 129, 20, 238)
+                                ? const Color.fromARGB(18, 129, 20, 238)
                                 : Colors.transparent,
                             // Change background color on selection
                             child: ListTile(
